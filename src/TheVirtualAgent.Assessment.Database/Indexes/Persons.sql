@@ -1,0 +1,2 @@
+CREATE UNIQUE NONCLUSTERED INDEX IX_Person_id ON Persons(id_number)
+GO;

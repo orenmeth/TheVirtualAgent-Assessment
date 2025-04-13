@@ -22,6 +22,9 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DacDescription>This is the central database deployment for TheVirtualAgent.Assessment.Database.</DacDescription>
+    <GenerateCreateScript>True</GenerateCreateScript>
+    <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -56,5 +59,19 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="Presets" />
+    <Folder Include="Tables" />
+    <Folder Include="Indexes" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Presets\Accounts.sql" />
+    <None Include="Presets\Persons.sql" />
+    <None Include="Presets\Transactions.sql" />
+    <Build Include="Tables\Accounts.sql" />
+    <Build Include="Tables\Persons.sql" />
+    <Build Include="Tables\Transactions.sql" />
+    <Build Include="Indexes\Accounts.sql" />
+    <Build Include="Indexes\Persons.sql" />
+    <None Include="TheVirtualAgent.Assessment.Database.publish.xml" />
   </ItemGroup>
 </Project>
