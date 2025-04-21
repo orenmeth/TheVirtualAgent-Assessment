@@ -1,4 +1,4 @@
-﻿CREATE OR ALTER PROCEDURE [dbo].[GetPersons]
+﻿CREATE PROCEDURE [dbo].[GetPersons]
 AS
 BEGIN
     SELECT

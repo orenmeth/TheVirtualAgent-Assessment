@@ -1,4 +1,4 @@
-﻿CREATE OR ALTER PROCEDURE GetTransaction
+﻿CREATE PROCEDURE GetTransaction
     @code INT
 AS
 BEGIN

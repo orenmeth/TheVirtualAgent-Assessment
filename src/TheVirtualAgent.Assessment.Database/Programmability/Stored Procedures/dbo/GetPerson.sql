@@ -1,4 +1,4 @@
-﻿CREATE OR ALTER PROCEDURE [dbo].[GetPerson]
+﻿CREATE PROCEDURE [dbo].[GetPerson]
     @code INT
 AS
 BEGIN

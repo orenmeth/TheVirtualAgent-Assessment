@@ -1,4 +1,4 @@
-﻿CREATE OR ALTER PROCEDURE [dbo].[GetAccount]
+﻿CREATE PROCEDURE [dbo].[GetAccount]
     @code INT
 AS
 BEGIN

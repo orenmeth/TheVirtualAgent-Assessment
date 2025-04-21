@@ -1,15 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <IncludeCompositeObjects>false</IncludeCompositeObjects>
     <TargetDatabaseName>TheVirtualAgentAssessment</TargetDatabaseName>
     <DeployScriptFileName>TheVirtualAgent.Assessment.Database.sql</DeployScriptFileName>
     <TargetConnectionString>Data Source=localhost\SQLEXPRESS01;Integrated Security=True;Persist Security Info=False;Pooling=False;Multiple Active Result Sets=False;Connect Timeout=60;Encrypt=True;Trust Server Certificate=True;Command Timeout=0</TargetConnectionString>
+    <BlockWhenDriftDetected>False</BlockWhenDriftDetected>
+    <ScriptDatabaseOptions>False</ScriptDatabaseOptions>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
+    <DropStatisticsNotInSource>False</DropStatisticsNotInSource>
+    <DropIndexesNotInSource>False</DropIndexesNotInSource>
+    <ExcludeLogins>False</ExcludeLogins>
+    <IgnorePermissions>False</IgnorePermissions>
+    <ExcludeLinkedServers>True</ExcludeLinkedServers>
+    <ExcludeLinkedServerLogins>True</ExcludeLinkedServerLogins>
+    <ExcludeDatabaseRoles>True</ExcludeDatabaseRoles>
+    <ExcludeCredentials>False</ExcludeCredentials>
+    <ExcludeAssemblies>True</ExcludeAssemblies>
+    <ExcludeApplicationRoles>True</ExcludeApplicationRoles>
+    <VerifyDeployment>True</VerifyDeployment>
+    <IgnoreColumnOrder>True</IgnoreColumnOrder>
+    <IgnoreIndexOptions>True</IgnoreIndexOptions>
+    <IgnoreNotForReplication>True</IgnoreNotForReplication>
+    <IgnoreTableOptions>True</IgnoreTableOptions>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
     <ProfileVersionNumber>1</ProfileVersionNumber>
+    <SqlCmdVariables>
+      <SqlCmdVariable Name="TheVirtualAgentUserPassword" Value="password12345^" />
+    </SqlCmdVariables>
+    <TheVirtualAgentUserPassword>password12345^</TheVirtualAgentUserPassword>
+    <DoNotEvaluateSqlCmdVariables>False</DoNotEvaluateSqlCmdVariables>
+    <IsAlwaysEncryptedParameterizationEnabled>True</IsAlwaysEncryptedParameterizationEnabled>
+    <RegisterDataTierApplication>False</RegisterDataTierApplication>
+    <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
+    <CreateNewDatabase>True</CreateNewDatabase>
   </PropertyGroup>
   <ItemGroup>
-	  <SqlCmdVariable Include="TheVirtualAgentUserPassword">
-		  <Value>0xF48FF634C173B9B57188832CEB8B56AFAA192EB169C5F5AC945CBE18513AFDC4F5FF47085052F8DBBDA5D8A49882B061969ADDAA7BDF5EDB5D23C06BAB6FCD0B</Value>
-	  </SqlCmdVariable>
+    <SqlCmdVariable Include="TheVirtualAgentUserPassword">
+      <Value>password12345^</Value>
+    </SqlCmdVariable>
   </ItemGroup>
 </Project>

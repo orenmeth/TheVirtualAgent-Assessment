@@ -1,4 +1,4 @@
-﻿CREATE OR ALTER PROCEDURE GetTransactions
+﻿CREATE PROCEDURE GetTransactions
 AS
 BEGIN
     SELECT

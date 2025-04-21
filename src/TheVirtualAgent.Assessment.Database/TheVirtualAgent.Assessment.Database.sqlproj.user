@@ -5,5 +5,7 @@
     <StartAction>StartNone</StartAction>
     <CreateNewDatabase>True</CreateNewDatabase>
     <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <DefaultPublishProfile>TheVirtualAgent.Assessment.Database.publish.xml</DefaultPublishProfile>
+    <SqlCmdVar__1>password12345^</SqlCmdVar__1>
   </PropertyGroup>
 </Project>

@@ -1,14 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\dev\\TheVirtualAgent-Assessment\\src\\",
+  "WorkspaceRootPath": "C:\\dev\\TheVirtualAgent-Assessment\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+      "AbsoluteMoniker": "D:0:0:{BA5B7235-D6D4-4A8D-AF49-4473DE44F516}|TheVirtualAgent.Assessment.Database\\TheVirtualAgent.Assessment.Database.sqlproj|C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{BA5B7235-D6D4-4A8D-AF49-4473DE44F516}|TheVirtualAgent.Assessment.Database\\TheVirtualAgent.Assessment.Database.sqlproj|solutionrelative:TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|F:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA5B7235-D6D4-4A8D-AF49-4473DE44F516}|TheVirtualAgent.Assessment.Database\\TheVirtualAgent.Assessment.Database.sqlproj|C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{BA5B7235-D6D4-4A8D-AF49-4473DE44F516}|TheVirtualAgent.Assessment.Database\\TheVirtualAgent.Assessment.Database.sqlproj|solutionrelative:TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|ResultFrame"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,17 +30,29 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TheVirtualAgent_6.Assessment.Database.publish.sql ",
-              "DocumentMoniker": "F:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql",
-              "RelativeDocumentMoniker": "TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_6.Assessment.Database.publish.sql",
-              "ToolTip": "TheVirtualAgent_6.Assessment.Database.publish.sql ",
+              "DocumentIndex": 1,
+              "Title": "TheVirtualAgent_41.Assessment.Database.publish.sql ",
+              "DocumentMoniker": "C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql",
+              "RelativeDocumentMoniker": "TheVirtualAgent.Assessment.Database\\bin\\Debug\\TheVirtualAgent_41.Assessment.Database.publish.sql",
+              "ToolTip": "TheVirtualAgent_41.Assessment.Database.publish.sql ",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-04-19T15:35:59.731Z",
+              "WhenOpened": "2025-04-21T18:52:19.793Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Script.PreDeployment.sql ",
+              "DocumentMoniker": "C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql",
+              "RelativeDocumentMoniker": "TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql",
+              "ToolTip": "C:\\dev\\TheVirtualAgent-Assessment\\src\\TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql",
+              "RelativeToolTip": "TheVirtualAgent.Assessment.Database\\Script.PreDeployment.sql",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-04-21T17:28:25.39Z",
               "EditorCaption": ""
             }
           ]

@@ -9,8 +9,7 @@
     <ProjectGuid>{ba5b7235-d6d4-4a8d-af49-4473de44f516}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>TheVirtualAgent.Assessment.Database</RootNamespace>
     <AssemblyName>TheVirtualAgent.Assessment.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
@@ -49,7 +48,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -67,14 +65,15 @@
     <Folder Include="Security\Roles" />
     <Folder Include="Security\Users" />
     <Folder Include="Presets" />
+    <Folder Include="Compares" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Programmability\Stored Procedures\dbo\GetAccount.sql" />
-    <None Include="Programmability\Stored Procedures\dbo\GetAccounts.sql" />
-    <None Include="Programmability\Stored Procedures\dbo\GetPerson.sql" />
-    <None Include="Programmability\Stored Procedures\dbo\GetPersons.sql" />
-    <None Include="Programmability\Stored Procedures\dbo\GetTransaction.sql" />
-    <None Include="Programmability\Stored Procedures\dbo\GetTransactions.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccount.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccounts.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetPerson.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetPersons.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetTransaction.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetTransactions.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\dbo\Accounts.sql" />
@@ -82,19 +81,32 @@
     <Build Include="Tables\dbo\Transactions.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="TheVirtualAgent.Assessment.Database.publish.xml" />
     <None Include="Presets\Persons.sql" />
     <None Include="Presets\Accounts.sql" />
     <None Include="Presets\Transactions.sql" />
-    <None Include="Security\Logins\TheVirtualAgentLogin.sql" />
-    <None Include="Security\Roles\ReadWrite_PI.sql" />
-    <None Include="Security\Users\TheVirtualAgent.sql" />
+    <Build Include="Security\Logins\TheVirtualAgentLogin.sql" />
+    <Build Include="Security\Roles\ReadWrite_PI.sql" />
+    <Build Include="Security\Users\TheVirtualAgent.sql" />
+    <None Include="TheVirtualAgent.Assessment.Database.publish.xml" />
+    <None Include="Compares\DefaultCompare.scmp" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Condition="'$(NetCoreBuild)' == 'true'">
       <Version>1.0.0</Version>
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="TheVirtualAgentUserPassword">
+      <DefaultValue>password12345^</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Script.PreDeployment.sql" />
   </ItemGroup>
   <Import Project="$(NETCoreTargetsPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" Condition="'$(NetCoreBuild)' == 'true'" />
   <Target Name="BeforeBuild">
