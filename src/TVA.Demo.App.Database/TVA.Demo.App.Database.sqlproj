@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>TVA.Demo.App.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{a42ae741-e372-479b-95b9-a12a12a02cbb}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>TVA.Demo.App.Database</RootNamespace>
+    <AssemblyName>TVA.Demo.App.Database</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateCreateScript>True</GenerateCreateScript>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Tables\dbo" />
+    <Folder Include="Presets" />
+    <Folder Include="Presets\dbo" />
+    <Folder Include="Compares" />
+    <Folder Include="Programmability" />
+    <Folder Include="Programmability\Stored Procedures" />
+    <Folder Include="Programmability\Stored Procedures\dbo" />
+    <Folder Include="Security" />
+    <Folder Include="Security\Logins" />
+    <Folder Include="Security\Roles" />
+    <Folder Include="Security\Users" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\dbo\Persons.sql" />
+    <Build Include="Tables\dbo\Accounts.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccount.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccounts.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetPerson.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetPersons.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetTransaction.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetTransactions.sql" />
+    <Build Include="Security\Logins\TVALogin.sql" />
+    <Build Include="Security\Users\TVAUser.sql" />
+    <None Include="Security\Roles\ReadWrite_PI.sql" />
+    <Build Include="Tables\dbo\Transactions.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccountsByPersonCode.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\UpsertAccount.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\DeleteAccount.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\UpsertPerson.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\DeletePerson.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\UpsertTransaction.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Presets\dbo\AccountPresets.sql" />
+    <None Include="Presets\dbo\PersonPresets.sql" />
+    <None Include="Presets\dbo\TransactionPresets.sql" />
+    <None Include="TVA.Demo.App.Database.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="TVAUserPassword">
+      <DefaultValue>0x020061E1677089FE3278023EA710BFB418059AE0287AE345D34569B2A27207BCE6BB2FB7377E3F3134CD072FADFFFD335057459A22DD23E0EE8428646E00754414BCDC13F6CB</DefaultValue>
+      <Value>$(SqlCmdVar__1)</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>
