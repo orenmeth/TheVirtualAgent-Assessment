@@ -1,5 +1,6 @@
 import PersonsPage from '../pages/PersonsPage.vue';
 import PersonDetailsPage from '../pages/PersonDetailsPage.vue';
+import AccountDetailsPage from 'src/pages/AccountDetailsPage.vue';
 
 const routes = [
   {
@@ -24,6 +25,13 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: 'person_details', component: PersonDetailsPage, props: true }
+    ]
+  },
+  {
+    path: '/account/:accountId?',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', name: 'account_details', component: AccountDetailsPage, props: true }
     ]
   },
   {

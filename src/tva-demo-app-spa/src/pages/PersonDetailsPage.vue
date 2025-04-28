@@ -32,12 +32,27 @@
           <q-card-section>
             <q-table
             v-if="personId && personAccounts.length > 0"
-            title="Person Accounts"
             :rows="personAccounts"
             :columns="accountColumns"
-            row-key="account_number"
+            row-key="accountNumber"
             :pagination="{ rowsPerPage: 10, page: 1 }"
+            :loading="loading"
           >
+            <template v-slot:body-cell-actions="props">
+              <q-btn
+                class="q-mr-xs"
+                color="primary"
+                flat
+                icon="more_vert"
+                @click="navigateToAccountDetails(props.row)"
+              >
+                <q-tooltip>View/Edit</q-tooltip>
+              </q-btn>
+            </template>
+
+            <template v-slot:no-data>
+              <div class="text-center q-pa-md">No accounts found.</div>
+            </template>
           </q-table>
           <div v-else-if="personId">No accounts associated with this person.</div>
           <div v-else>No accounts will be associated until the person is created.</div>
@@ -52,14 +67,16 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
+import { usePersonsStore } from 'src/stores/personsStore'
 
 const $q = useQuasar();
 
 const route = useRoute();
 const router = useRouter();
+const personsStore = usePersonsStore();
 
-const personId = ref(route.params.personId);
-const personDetails = ref(null);
+const personId = ref(parseInt(route.params.personId, 10));
+const loading = ref(false);
 const personForm = ref({
   code: '',
   name: '',
@@ -69,49 +86,74 @@ const personForm = ref({
 const personAccounts = ref([]);
 const accountColumns = ref([
   { name: 'code', required: true, label: 'Account Code', align: 'left', field: 'code', sortable: true },
-  { name: 'account_number', label: 'Account Number', align: 'left', field: 'account_number', sortable: true },
-  { name: 'outstanding_balance', label: 'Outstanding Balance', align: 'right', field: 'outstanding_balance', sortable: true, format: (val) => parseFloat(val).toFixed(2) },
+  { name: 'accountNumber', label: 'Account Number', align: 'left', field: 'accountNumber', sortable: true },
+  { name: 'outstandingBalance', label: 'Outstanding Balance', align: 'right', field: 'outstandingBalance', sortable: true, format: (val) => parseFloat(val).toFixed(2) },
+  { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
 ]);
+
+const fetchPersonDetails = async (id) => {
+  loading.value = true;
+  try {
+    const person = await personsStore.fetchPersonByCode(id);
+    if (person) {
+      personForm.value = {
+        code: person.code,
+        name: person.name,
+        surname: person.surname,
+        idNumber: person.idNumber,
+      };
+      personAccounts.value = person.accounts || [];
+    } else {
+      $q.notify({
+        type: 'error',
+        message: 'Person not found',
+      });
+      router.push({ name: 'persons' });
+    }
+  } catch (error) {
+    console.error('Error fetching person details:', error);
+    $q.notify({
+      type: 'error',
+      message: 'Failed to load person details',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
 
 onMounted(() => {
   if (personId.value) {
     fetchPersonDetails(personId.value);
-    fetchPersonAccounts(personId.value);
   }
 });
 
-const fetchPersonDetails = (id) => {
-  // Simulate fetching person details (replace with your actual API call)
-  console.log(id);
-  setTimeout(() => {
-    const foundPerson = { code: 'P001', name: 'John', surname: 'Doe', idNumber: '1234567890' }; // Replace with actual data
-    personDetails.value = { ...foundPerson };
-    personForm.value = { ...foundPerson };
-  }, 300);
-};
-
-const fetchPersonAccounts = (personId) => {
-  // Simulate fetching person accounts (replace with your actual API call)
-  console.log(personId);
-  setTimeout(() => {
-    const accountsData = [
-      { code: 'A123', person_code: 'P001', account_number: 'ACC001', outstanding_balance: 1250.50 },
-      { code: 'B456', person_code: 'P001', account_number: 'ACC002', outstanding_balance: 580.25 },
-      // ... more accounts
-    ];
-    personAccounts.value = accountsData;
-  }, 500);
-};
-
-const savePersonDetails = () => {
-  if (personId.value) {
-    // Logic to update the existing person (e.g., API call)
-    $q.notify({ type: 'positive', message: 'Person details updated successfully!' });
+const savePersonDetails = async () => { // Make savePersonDetails async
+  loading.value = true;
+  try {
+    if (personId.value) {
+      // await personsStore.updatePerson(personId.value, personForm.value); // Adjust the method name in store
+      $q.notify({ type: 'positive', message: 'Person details updated successfully!' });
+    } else {
+      // await personsStore.createPerson(personForm.value);  // Adjust the method name in store
+      $q.notify({ type: 'positive', message: 'New person created successfully!' });
+    }
     router.push({ name: 'persons' });
+  } catch (error) {
+    console.error('Error saving person details:', error);
+    $q.notify({
+      type: 'error',
+      message: 'Failed to save person details',
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const navigateToAccountDetails = (account) => {
+  if (account) {
+    router.push({ name: 'account_details', params: { accountId: account.code } });
   } else {
-    // Logic to create a new person (e.g., API call)
-    $q.notify({ type: 'positive', message: 'New person created successfully!' });
-    router.push({ name: 'persons' });
+    router.push({ name: 'account_details' });
   }
 };
 </script>

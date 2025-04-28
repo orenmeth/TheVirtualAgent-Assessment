@@ -50,7 +50,7 @@ namespace TVA.Demo.App.Application.Services
                     Code = p.Code,
                     Name = p.Name,
                     Surname = p.Surname,
-                    IdNumber = p.IdNumber,
+                    IdNumber = p.Id_Number,
                     Accounts = []
                 })
                 .ToList();
@@ -103,16 +103,16 @@ namespace TVA.Demo.App.Application.Services
             }
 
             var accounts = accountDtos!
-                .Select(p => new Account
+                .Select(a => new Account
                 {
-                    Code = p.Code,
-                    PersonCode = p.PersonCode,
-                    AccountNumber = p.AccountNumber,
-                    OutstandingBalance = p.OutstandingBalance
+                    Code = a.Code,
+                    PersonCode = a.Person_Code,
+                    AccountNumber = a.Account_Number,
+                    OutstandingBalance = a.Outstanding_Balance
                 })
                 .ToList();
 
-            Person person = new() { Code = personDto.Code, Name = personDto.Name, Surname = personDto.Surname, IdNumber = personDto.IdNumber, Accounts = accounts };
+            Person person = new() { Code = personDto.Code, Name = personDto.Name, Surname = personDto.Surname, IdNumber = personDto.Id_Number, Accounts = accounts };
 
             return person;
         }

@@ -11,9 +11,7 @@
           @click="$q.dark.toggle()"
           :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
         />
-        <q-card
-          v-bind:style="$q.platform.is.mobile ? { width: '80%' } : { width: '30%' }"
-        >
+        <q-card :style="cardStyle">
           <q-img src="https://cdn.pixabay.com/photo/2018/05/04/15/49/cyber-security-3374252_1280.jpg"></q-img>
           <q-card-section>
             <q-avatar
@@ -23,9 +21,9 @@
             >
               <img alt="boy" src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
-            <div class="row no-wrap items-center">
+            <!-- <div class="row no-wrap items-center">
               <div class="col text-h6 ellipsis">Log in to PAM</div>
-            </div>
+            </div> -->
           </q-card-section>
 
           <q-card-section>
@@ -42,15 +40,6 @@
                   color="primary"
                   @click="loginNotify"
                 />
-
-                <a
-                  style="font-size: 30px"
-                  class="float-right"
-                  href="https://github.com/sponsors/mayank091193"
-                  target="_blank"
-                  title="Donate"
-                  ><i class="fas fa-heart" style="color: #eb5daa"></i
-                ></a>
               </div>
             </q-form>
           </q-card-section>
@@ -60,22 +49,24 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue'
+import { useQuasar } from 'quasar'
 
-export default {
-  data() {
-    return {
-      username: 'admin',
-      password: 'Admin@CRM',
-    }
-  },
-  methods: {
-    loginNotify() {
-      this.$q.notify({
-        message: 'Login Successful',
-      })
-    },
-  }
+const $q = useQuasar()
+const username = ref('admin')
+const password = ref('Admin@CRM')
+
+const cardStyle = computed(() => {
+  return $q.platform.is.mobile
+    ? { width: '90%', margin: '0 auto' }
+    : { width: '30%', minWidth: '200px' }
+})
+
+function loginNotify() {
+  $q.notify({
+    message: 'Login Successful',
+  })
 }
 </script>
 

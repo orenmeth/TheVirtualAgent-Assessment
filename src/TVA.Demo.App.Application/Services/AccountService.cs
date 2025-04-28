@@ -1,0 +1,138 @@
+﻿using Azure;
+using Microsoft.Extensions.Caching.Memory;
+using TVA.Demo.App.Application.Extensions;
+using TVA.Demo.App.Application.Interfaces;
+using TVA.Demo.App.Domain.Entities;
+using TVA.Demo.App.Domain.Interfaces;
+using TVA.Demo.App.Domain.Models;
+
+namespace TVA.Demo.App.Application.Services
+{
+    public class AccountService(IAccountRepository accountRepository, ITransactionRepository transactionRepository, IMemoryCache cache) : IAccountService
+    {
+        private readonly IAccountRepository _accountRepository = accountRepository;
+        private readonly ITransactionRepository _transactionRepository = transactionRepository;
+        private readonly IMemoryCache _cache = cache;
+        private const string AccountsCacheKey = "AccountsData";
+        private const string AccountCacheKey = "AccountData";
+        private const string AccountTransactionsCacheKey = "AccountTransactionsData";
+
+        public async Task<List<Account>> GetAccountsByPersonCodeAsync(int personCode, CancellationToken cancellationToken)
+        {
+            string cacheKey = $"{AccountsCacheKey}";
+
+            IEnumerable<AccountDto>? accountDtos;
+            if (_cache.TryGetValue(cacheKey, out List<AccountDto>? cachedAccounts))
+            {
+                accountDtos = cachedAccounts;
+            }
+            else
+            {
+                accountDtos = await _accountRepository.GetAccountsByPersonCodeAsync(personCode, cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(cacheKey, accountDtos, cacheEntryOptions);
+            }
+
+            if (accountDtos == null || !accountDtos.Any())
+            {
+                return [];
+            }
+
+            var accounts = accountDtos
+                .Select(a => new Account
+                {
+                    Code = a.Code,
+                    PersonCode = a.Person_Code,
+                    AccountNumber = a.Account_Number,
+                    OutstandingBalance = a.Outstanding_Balance,
+                    Transactions = []
+                })
+                .ToList();
+
+            return accounts;
+        }
+
+        public async Task<Account> GetAccountAsync(int code, CancellationToken cancellationToken)
+        {
+            string accountCacheKey = $"{AccountCacheKey}_Code_{code}";
+            string accountTransactionsCacheKey = $"{AccountTransactionsCacheKey}_Code_{code}";
+
+            AccountDto? accountDto;
+            if (_cache.TryGetValue(accountCacheKey, out AccountDto? cachedAccount))
+            {
+                accountDto = cachedAccount;
+            }
+            else
+            {
+                accountDto = await _accountRepository.GetAccountAsync(code, cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(accountCacheKey, accountDto, cacheEntryOptions);
+            }
+
+            if (accountDto == null)
+            {
+                throw new RequestFailedException($"Account with code {code} not found.");
+            }
+
+            IEnumerable<TransactionDto>? transactionDtos;
+            if (_cache.TryGetValue(accountTransactionsCacheKey, out List<TransactionDto>? cachedTransactions))
+            {
+                transactionDtos = cachedTransactions;
+            }
+            else
+            {
+                transactionDtos = await _transactionRepository.GetTransactionsByAccountCodeAsync(code, cancellationToken);
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+                _cache.Set(accountTransactionsCacheKey, transactionDtos, cacheEntryOptions);
+            }
+
+            var transactions = transactionDtos!
+                .Select(t => new Transaction
+                {
+                    Code = t.Code,
+                    AccountCode = t.Account_Code,
+                    TransactionDate = t.Transaction_Date,
+                    CaptureDate = t.Capture_Date,
+                    Amount = t.Amount,
+                    Description = t.Description!
+                })
+                .ToList();
+
+            Account account = new()
+            {
+                Code = accountDto.Code,
+                PersonCode = accountDto.Person_Code,
+                AccountNumber = accountDto.Account_Number,
+                OutstandingBalance = accountDto.Outstanding_Balance,
+                Transactions = transactions
+            };
+
+            return account;
+        }
+
+        private void InvalidateAccountsCache()
+        {
+            var keysToRemove = _cache.GetKeysStartingWith(AccountsCacheKey).ToList();
+            foreach (var key in keysToRemove)
+            {
+                _cache.Remove(key);
+            }
+        }
+    }
+}

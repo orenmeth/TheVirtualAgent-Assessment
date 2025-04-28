@@ -1,12 +1,13 @@
 <template>
   <q-layout view="lHh LpR lFf">
     <q-header
+      elevated
       reveal
       :class="$q.dark.isActive ? 'header_dark' : 'header_normal'"
     >
       <q-toolbar>
         <q-btn
-          @click="leftDrawerOpen = !leftDrawerOpen"
+          @click="toggleLeftDrawer"
           flat
           round
           dense
@@ -14,7 +15,8 @@
           class="q-mr-sm"
         />
 
-        <q-toolbar-title>PAM - Person Account Management</q-toolbar-title>
+        <q-toolbar-title>Person Account Manager</q-toolbar-title>
+
         <q-btn
           class="q-mr-xs"
           flat
@@ -33,15 +35,19 @@
           to="/"
         />
       </q-toolbar>
+
     </q-header>
+
     <q-drawer
-      class="left-navigation text-white"
+      class="left-navigation text-white transition-width"
       :class="$q.dark.isActive ? 'drawer_dark' : 'drawer_normal'"
       show-if-above
       v-model="leftDrawerOpen"
       style="background-image: url(https://cdn.pixabay.com/photo/2020/03/26/10/58/norway-4970080_1280.jpg) !important;"
       side="left"
       elevated
+      :width="drawerWidth"
+      :breakpoint="600"
     >
       <div
         class="full-height"
@@ -53,7 +59,8 @@
               <img alt="boy" src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
 
-            <q-toolbar-title></q-toolbar-title>
+            <q-toolbar-title>P A M</q-toolbar-title>
+
           </q-toolbar>
           <hr />
           <q-scroll-area style="height:100%;">
@@ -70,7 +77,7 @@
                   <q-icon name="dashboard" />
                 </q-item-section>
 
-                <q-item-section>
+                <q-item-section v-show="!isDrawerMinimized">
                   Home
                 </q-item-section>
               </q-item>
@@ -88,7 +95,7 @@
                   <q-icon name="people" />
                 </q-item-section>
 
-                <q-item-section>
+                <q-item-section v-show="!isDrawerMinimized">
                   Persons
                 </q-item-section>
               </q-item>
@@ -104,7 +111,7 @@
                   <q-icon name="info" />
                 </q-item-section>
 
-                <q-item-section>
+                <q-item-section v-show="!isDrawerMinimized">
                   About
                 </q-item-section>
               </q-item>
@@ -120,7 +127,7 @@
                   <q-icon name="chat" />
                 </q-item-section>
 
-                <q-item-section>
+                <q-item-section v-show="!isDrawerMinimized">
                   Contact
                 </q-item-section>
               </q-item>
@@ -130,6 +137,7 @@
         </div>
       </div>
     </q-drawer>
+
     <q-page-container>
       <q-page class="row no-wrap">
         <div class="col">
@@ -148,28 +156,27 @@
         </div>
       </q-page>
     </q-page-container>
+
   </q-layout>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 
-export default {
-  setup() {
-    const leftDrawerOpen = ref(false);
+const leftDrawerOpen = ref(true);
+const isDrawerMinimized = ref(false);
+const normalDrawerWidth = 300;
+const drawerWidth = ref(normalDrawerWidth);
 
-    return {
-      leftDrawerOpen
-    }
-  },
-  methods: {
-    logoutNotify() {
-      this.$q.notify({
-        message: "Logged out"
-      });
-    }
-  }
-};
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
+
+function logoutNotify() {
+  this.$q.notify({
+      message: "Logged out"
+    });
+}
 </script>
 
 <style>
@@ -180,10 +187,16 @@ export default {
 
 .drawer_normal {
   background-color: rgba(1, 1, 1, 0.75);
+  opacity: 0.75;
 }
 
 .drawer_dark {
   background-color: #010101f2;
+  opacity: 0.95;
+}
+
+.transition-width {
+  transition: width 0.3s ease;
 }
 
 .navigation-item {
@@ -200,22 +213,24 @@ body {
 }
 
 .header_normal {
-  background: linear-gradient(
-    145deg,
-    rgb(32, 106, 80) 15%,
-    rgb(21, 57, 102) 70%
-  );
+  /* background-color: rgb(121, 182, 118); */
+  background-color: rgb(73, 92, 95);
+  color: white;
 }
 
 .header_dark {
-  background: linear-gradient(145deg, rgb(61, 14, 42) 15%, rgb(14, 43, 78) 70%);
+  /* background-color: rgb(32, 33, 33); */
+  background-color: rgb(31, 29, 28);
+  color: white;
 }
 
 .router_view_dark{
-  background-color: #313131e4;
+  background-color: rgb(32, 33, 33);
+  overflow: hidden;
 }
 
 .router_view_normal {
   background-color: #f3f3f3e4;
+  overflow: hidden;
 }
 </style>

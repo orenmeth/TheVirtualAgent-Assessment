@@ -5,7 +5,7 @@
         public required int Code { get; set; }
         public string? Name { get; set; }
         public string? Surname { get; set; }
-        public required string IdNumber { get; set; }
+        public required string Id_Number { get; set; }
     }
 }
     

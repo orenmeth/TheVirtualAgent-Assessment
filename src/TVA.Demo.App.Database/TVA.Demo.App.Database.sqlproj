@@ -89,6 +89,7 @@
     <Build Include="Programmability\Stored Procedures\dbo\UpsertPerson.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\DeletePerson.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\UpsertTransaction.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetTransactionsByAccountCode.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Presets\dbo\AccountPresets.sql" />

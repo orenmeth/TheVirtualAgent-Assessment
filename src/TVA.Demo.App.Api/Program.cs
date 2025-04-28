@@ -20,9 +20,10 @@ builder.Services.AddMemoryCache();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-//builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddTransient<IPersonService, PersonService>();
+builder.Services.AddTransient<IAccountService, AccountService>();
 
 builder.Services.AddCors(options =>
 {

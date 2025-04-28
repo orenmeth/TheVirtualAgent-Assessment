@@ -27,12 +27,31 @@ export const usePersonsStore = defineStore('personsStore', () => {
     }
   }
 
+  async function fetchPersonByCode(code) {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const response = await api.get(`/Person/GetPerson/${code}`);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        error.value = `Failed to fetch person: HTTP status ${response.status}`;
+      }
+    } catch (err) {
+      error.value = `Failed to fetch person: ${err.message}`;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   return {
     persons,
     totalItems,
     loading,
     error,
     fetchPersons,
+    fetchPersonByCode,
   };
 });
 
