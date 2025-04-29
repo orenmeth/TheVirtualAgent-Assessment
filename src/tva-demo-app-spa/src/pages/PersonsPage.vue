@@ -11,52 +11,16 @@
         v-model:pagination="pagination"
         @request="onRequest"
         :filter="filter"
+        :grid="mode === 'grid'"
       >
-        <template v-slot:top-right="props">
-          <q-btn
-            outline
-            color="primary"
-            label="Add New Person"
-            @click="navigateToPersonDetails(null)"
-          />
-          <q-input outlined dense debounce="300" v-model="filter" placeholder="Search">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-
-          <q-btn
-            flat
-            round
-            dense
-            :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            @click="props.toggleFullscreen"
-            v-if="mode === 'list'"
-          >
-            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
-              >{{ props.inFullscreen ? 'Exit Fullscreen' : 'Toggle Fullscreen' }}
-            </q-tooltip>
-          </q-btn>
-
-          <q-btn
-            flat
-            round
-            dense
-            :icon="mode === 'grid' ? 'list' : 'grid_on'"
-            @click="mode = mode === 'grid' ? 'list' : 'grid'; separator= mode === 'grid' ? 'none' : 'horizontal'"
-            v-if="!props.inFullscreen"
-          >
-            <q-tooltip :disable="$q.platform.is.mobile" v-close-popup
-              >{{ mode === 'grid' ? 'List' : 'Grid' }}
-            </q-tooltip>
-          </q-btn>
-
-          <q-btn
-            color="primary"
-            icon-right="archive"
-            label="Export to csv"
-            no-caps
-            @click="exportTable"
+        <template v-slot:top-right>
+          <TableButtons
+            @update:mode="mode = $event"
+            @update:fullscreen="fullscreen = $event"
+            :columns="columns"
+            :tableData="personsStore.persons"
+            @add="handleAdd"
+            @update:filter="handleFilter($event)"
           />
         </template>
 
@@ -85,13 +49,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onActivated, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePersonsStore } from 'src/stores/personsStore'
-import { exportFile } from 'quasar'
+import TableButtons from 'src/components/TableActions.vue'
 
 const router = useRouter()
 const personsStore = usePersonsStore()
+const filter = ref('')
+const mode = ref('list')
+const fullscreen = ref(false)
 
 const columns = ref([
   { name: 'code', required: true, label: 'Code', align: 'left', field: 'code', sortable: true },
@@ -110,20 +77,17 @@ const pagination = ref({
 })
 
 const onRequest = (props) => {
-  const { page, rowsPerPage } = props.pagination
-  personsStore.fetchPersons(page, rowsPerPage)
+  const { page, rowsPerPage, sortBy, descending } = props.pagination
+  personsStore.fetchPersons(sortBy, descending, page, rowsPerPage, filter.value)
   pagination.value.page = page
   pagination.value.rowsPerPage = rowsPerPage
   pagination.value.rowsNumber = personsStore.totalItems
+  pagination.value.sortBy = sortBy;
+  pagination.value.descending = descending;
 }
 
 onMounted(() => {
-  personsStore.fetchPersons(pagination.value.page, pagination.value.rowsPerPage)
-  pagination.value.rowsNumber = personsStore.totalItems
-})
-
-onActivated(() => {
-  personsStore.fetchPersons(pagination.value.page, pagination.value.rowsPerPage)
+  personsStore.fetchPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
   pagination.value.rowsNumber = personsStore.totalItems
 })
 
@@ -140,43 +104,14 @@ const navigateToPersonDetails = (person) => {
   }
 }
 
-function wrapCsvValue(val, formatFn) {
-  let formatted = formatFn !== void 0 ? formatFn(val) : val
-  formatted = formatted === void 0 || formatted === null ? '' : String(formatted)
-  formatted = formatted.split('"').join('""')
-  return `"${formatted}"`
+function handleAdd() {
+  router.push({ name: 'person_details' })
 }
 
-function exportTable() {
-  const content = [this.columns.map((col) => wrapCsvValue(col.label))]
-    .concat(
-      this.data.map((row) =>
-        this.columns
-          .map((col) =>
-            wrapCsvValue(
-              typeof col.field === 'function'
-                ? col.field(row)
-                : (() => {
-                    const fieldName = col.field === void 0 ? col.name : col.field;
-                    return row[fieldName];
-                  })(),
-              col.format,
-            ),
-          )
-          .join(','),
-      ),
-    )
-    .join('\r\n')
-
-  const status = exportFile('customer-management.csv', content, 'text/csv')
-
-  if (status !== true) {
-    this.$q.notify({
-      message: 'Browser denied file download...',
-      color: 'negative',
-      icon: 'warning',
-    })
-  }
+function handleFilter(newFilter) {
+  filter.value = newFilter
+  personsStore.fetchPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
+  console.log('Filter applied:', newFilter)
 }
 </script>
 

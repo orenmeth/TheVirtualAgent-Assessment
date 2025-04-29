@@ -10,9 +10,9 @@
           <q-card-section>
             <q-form @submit.prevent="savePersonDetails" class="q-gutter-md">
             <q-input outlined v-model="personForm.code" label="Code" readonly />
-            <q-input outlined v-model="personForm.name" label="Name" :rules="[val => val && val.length > 0 || 'Please enter a name']" />
-            <q-input outlined v-model="personForm.surname" label="Surname" />
-            <q-input outlined v-model="personForm.idNumber" label="ID Number" />
+            <q-input outlined v-model="personForm.name" label="Name" :rules="[val => val.length <= 50 || 'Name must be less than 50 characters']" />
+            <q-input outlined v-model="personForm.surname" label="Surname" :rules="[val => val.length <= 50 || 'Surname must be less than 50 characters']" />
+            <q-input outlined v-model="personForm.idNumber" label="ID Number" :rules="[val => val.length <= 50 || 'ID number must be less than 50 characters']" />
 
             <div class="q-mt-md">
               <q-btn type="submit" color="primary" :label="personId ? 'Save Changes' : 'Create Person'" />
@@ -157,3 +157,7 @@ const navigateToAccountDetails = (account) => {
   }
 };
 </script>
+
+<style lang="scss">
+
+</style>

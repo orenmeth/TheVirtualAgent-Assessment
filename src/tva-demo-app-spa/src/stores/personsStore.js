@@ -8,14 +8,22 @@ export const usePersonsStore = defineStore('personsStore', () => {
   const loading = ref(false);
   const error = ref(null);
 
-  async function fetchPersons(page = 1, pageSize = 10) {
+  async function fetchPersons(sortBy, descending, page = 1, pageSize = 10, filter = null) {
     loading.value = true;
     error.value = null;
-
     try {
       const response = await api.get(`/Person/GetPersons/page/${page}/pageSize/${pageSize}`);
       if (response.status === 200) {
-        persons.value = response.data.items;
+        // Move to server-side filtering
+        persons.value = response.data.items.filter(item => {
+          if (!filter) return true;
+          if (item.name.toLowerCase().includes(filter.toLowerCase())) return true;
+          if (item.surname.toLowerCase().includes(filter.toLowerCase())) return true;
+          if (item.idNumber.toLowerCase().includes(filter.toLowerCase())) return true;
+        }).sort((a, b) => a - b);
+        if (descending) {
+          persons.value.reverse();
+        }
         totalItems.value = response.data.totalItems;
       } else {
         error.value = `Failed to fetch persons: HTTP status ${response.status}`;
