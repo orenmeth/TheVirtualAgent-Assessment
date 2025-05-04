@@ -78,7 +78,7 @@ const pagination = ref({
 
 const onRequest = (props) => {
   const { page, rowsPerPage, sortBy, descending } = props.pagination
-  personsStore.fetchPersons(sortBy, descending, page, rowsPerPage, filter.value)
+  personsStore.getPersons(sortBy, descending, page, rowsPerPage, filter.value)
   pagination.value.page = page
   pagination.value.rowsPerPage = rowsPerPage
   pagination.value.rowsNumber = personsStore.totalItems
@@ -87,7 +87,7 @@ const onRequest = (props) => {
 }
 
 onMounted(() => {
-  personsStore.fetchPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
+  personsStore.getPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
   pagination.value.rowsNumber = personsStore.totalItems
 })
 
@@ -110,7 +110,7 @@ function handleAdd() {
 
 function handleFilter(newFilter) {
   filter.value = newFilter
-  personsStore.fetchPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
+  personsStore.getPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
   console.log('Filter applied:', newFilter)
 }
 </script>

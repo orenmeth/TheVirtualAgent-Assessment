@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
 
 namespace TVA.Demo.App.Infrastructure.Repositories
@@ -21,6 +22,16 @@ namespace TVA.Demo.App.Infrastructure.Repositories
         public async Task<int> ExecuteAsync(IDbConnection connection, string sql, object? param = null, IDbTransaction? transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         {
             return await connection.ExecuteAsync(sql, param, transaction, commandTimeout, commandType);
+        }
+
+        public async Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection connection, CommandDefinition command)
+        {
+            return await connection.QuerySingleOrDefaultAsync<T>(command);
+        }
+
+        public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, CommandDefinition command)
+        {
+            return await connection.QueryAsync<T>(command);
         }
     }
 }

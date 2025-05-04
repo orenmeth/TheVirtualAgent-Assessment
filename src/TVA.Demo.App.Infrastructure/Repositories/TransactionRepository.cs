@@ -1,16 +1,16 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using System.Transactions;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
 
 namespace TVA.Demo.App.Infrastructure.Repositories
 {
-    public class TransactionRepository(IConnectionFactory connectionFactory, IDbConnectionProvider dbConnectionProvider) : ITransactionRepository
+    public class TransactionRepository(IConnectionFactory connectionFactory, IDbConnectionProvider dbConnectionProvider, IDapperWrapper dapperWrapper) : ITransactionRepository
     {
         private readonly IConnectionFactory _connectionFactory = connectionFactory;
         private readonly IDbConnectionProvider _dbConnectionProvider = dbConnectionProvider;
+        private readonly IDapperWrapper _dapperWrapper = dapperWrapper;
 
         public async Task<TransactionDto?> GetTransactionAsync(int code, CancellationToken cancellationToken)
         {
@@ -18,7 +18,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@code", code);
 
-            return await connection.QuerySingleOrDefaultAsync<TransactionDto>("GetTransaction", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "GetTransaction",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            return await _dapperWrapper.QuerySingleOrDefaultAsync<TransactionDto>(connection, commandDefinition);
         }
 
         public async Task<IEnumerable<TransactionDto>> GetTransactionsByAccountCodeAsync(int accountCode, CancellationToken cancellationToken)
@@ -27,7 +34,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@account_code", accountCode);
 
-            return await connection.QueryAsync<TransactionDto>("GetTransactionsByAccountCode", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "GetTransactionsByAccountCode",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            return await _dapperWrapper.QueryAsync<TransactionDto>(connection, commandDefinition);
         }
 
         public async Task UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken)
@@ -41,7 +55,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             parameters.Add("@amount", transaction.Amount);
             parameters.Add("@description", transaction.Description);
 
-            await connection.ExecuteAsync("UpsertTransaction", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "UpsertTransaction",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
         }
 
         public async Task DeleteTransactionAsync(int code, CancellationToken cancellationToken)
@@ -50,7 +71,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@code", code);
 
-            await connection.ExecuteAsync("DeleteTransaction", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "DeleteTransaction",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
         }
     }
 }

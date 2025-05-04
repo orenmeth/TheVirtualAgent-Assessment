@@ -1,20 +1,18 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import { api } from 'boot/axios';
+import { ref } from 'vue';
 
 export const usePersonsStore = defineStore('personsStore', () => {
-  const persons = ref([]);
-  const totalItems = ref(0);
-  const loading = ref(false);
-  const error = ref(null);
+    const persons = ref([]);
+    const loading = ref(false);
+    const person = ref(null);
+    const error = ref(null);
 
-  async function fetchPersons(sortBy, descending, page = 1, pageSize = 10, filter = null) {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await api.get(`/Person/GetPersons/page/${page}/pageSize/${pageSize}`);
-      if (response.status === 200) {
-        // Move to server-side filtering
+    async function getPersons(sortBy, descending, page = 1, pageSize = 10, filter = null) {
+      loading.value = true;
+      error.value = null;
+      try {
+        const response = await api.get(`/Person/GetPersons/page/${page}/pageSize/${pageSize}/sortBy/${sortBy}/descending/${descending}`);
         persons.value = response.data.items.filter(item => {
           if (!filter) return true;
           if (item.name.toLowerCase().includes(filter.toLowerCase())) return true;
@@ -24,45 +22,80 @@ export const usePersonsStore = defineStore('personsStore', () => {
         if (descending) {
           persons.value.reverse();
         }
-        totalItems.value = response.data.totalItems;
-      } else {
-        error.value = `Failed to fetch persons: HTTP status ${response.status}`;
+      } catch (error) {
+        console.error('Error fetching persons:', error);
+      } finally {
+        loading.value = false;
       }
-    } catch (err) {
-      error.value = `Failed to fetch persons: ${err.message}`;
-    } finally {
-      loading.value = false;
     }
-  }
 
-  async function fetchPersonByCode(code) {
-    loading.value = true;
-    error.value = null;
-
-    try {
-      const response = await api.get(`/Person/GetPerson/${code}`);
-      if (response.status === 200) {
+    async function getPersonByCode(code) {
+      loading.value = true;
+      error.value = null;
+      try {
+        const response = await api.get(`/Person/GetPerson/${code}`);
+        person.value = response.data;
         return response.data;
-      } else {
-        error.value = `Failed to fetch person: HTTP status ${response.status}`;
+      } catch (error) {
+        console.error('Error fetching person by code:', error);
+        return null;
+      } finally {
+        loading.value = false;
       }
-    } catch (err) {
-      error.value = `Failed to fetch person: ${err.message}`;
-    } finally {
-      loading.value = false;
     }
-  }
 
-  return {
-    persons,
-    totalItems,
-    loading,
-    error,
-    fetchPersons,
-    fetchPersonByCode,
-  };
+    async function upsertPerson(personData) {
+      loading.value = true;
+      error.value = null;
+
+      const existingPersonIndex = persons.value.findIndex(p => p.code === personData.code);
+
+      try {
+          const response = await api.post(`/persons/upsert`, personData);
+
+          if (existingPersonIndex > -1) {
+              persons.value[existingPersonIndex] = response.data;
+          } else {
+              persons.value.push(response.data);
+          }
+          person.value = response.data;
+          return response.data;
+      }
+       catch (error) {
+        if (existingPersonIndex > -1) {
+          console.error('Error updating person:', error);
+        } else {
+          console.error('Error creating person:', error);
+        }          
+        throw error;
+      } finally {
+          loading.value = false;
+      }
+    }
+
+    async function deletePerson(code) {
+      loading.value = true;
+      error.value = null;
+      try {
+        await api.delete(`/persons/${code}`);
+        persons.value = this.persons.filter(p => p.code !== code);
+        person.value = null;
+      } catch (error) {
+        console.error('Error deleting person:', error);
+        throw error;
+      } finally {
+        loading.value = false;
+      }
+    }
+
+    return {
+      persons,
+      loading,
+      person,
+      error,
+      getPersons,
+      getPersonByCode,
+      deletePerson,
+      upsertPerson,
+    };
 });
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(usePersonsStore, import.meta.hot))
-}

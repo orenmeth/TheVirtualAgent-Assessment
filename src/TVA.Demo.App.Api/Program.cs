@@ -18,6 +18,8 @@ builder.Services.AddSingleton<IConnectionFactory, SqlConnectionFactory>();
 builder.Services.AddSingleton<IDbConnectionProvider, DbConnectionProvider>();
 builder.Services.AddMemoryCache();
 
+builder.Services.AddSingleton<IDapperWrapper, DapperWrapper>();
+
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();

@@ -6,10 +6,11 @@ using TVA.Demo.App.Domain.Interfaces;
 
 namespace TVA.Demo.App.Infrastructure.Repositories
 {
-    public class AccountRepository(IConnectionFactory connectionFactory, IDbConnectionProvider dbConnectionProvider) : IAccountRepository
+    public class AccountRepository(IConnectionFactory connectionFactory, IDbConnectionProvider dbConnectionProvider, IDapperWrapper dapperWrapper) : IAccountRepository
     {
         private readonly IConnectionFactory _connectionFactory = connectionFactory;
         private readonly IDbConnectionProvider _dbConnectionProvider = dbConnectionProvider;
+        private readonly IDapperWrapper _dapperWrapper = dapperWrapper;
 
         public async Task<AccountDto?> GetAccountAsync(int code, CancellationToken cancellationToken)
         {
@@ -17,7 +18,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@code", code);
 
-            return await connection.QuerySingleOrDefaultAsync<AccountDto>("GetAccount", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "GetAccount",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            return await _dapperWrapper.QuerySingleOrDefaultAsync<AccountDto>(connection, commandDefinition);
         }
 
         public async Task<IEnumerable<AccountDto>> GetAccountsByPersonCodeAsync(int personCode, CancellationToken cancellationToken)
@@ -25,7 +33,15 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
             parameters.Add("@person_code", personCode);
-            return await connection.QueryAsync<AccountDto>("GetAccountByPersonCode", parameters, commandType: CommandType.StoredProcedure);
+
+            var commandDefinition = new CommandDefinition(
+                commandText: "GetAccountsByPersonCode",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            return await _dapperWrapper.QueryAsync<AccountDto>(connection, commandDefinition);
         }
 
         public async Task UpsertAccountAsync(AccountDto account, CancellationToken cancellationToken)
@@ -37,7 +53,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             parameters.Add("@account_number", account.Account_Number);
             parameters.Add("@outstanding_balance", account.Outstanding_Balance);
 
-            await connection.ExecuteAsync("UpsertAccount", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "UpsertAccount",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
         }
 
         public async Task DeleteAccountAsync(int code, CancellationToken cancellationToken)
@@ -46,7 +69,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@code", code);
 
-            await connection.ExecuteAsync("DeleteAccount", parameters, commandType: CommandType.StoredProcedure);
+            var commandDefinition = new CommandDefinition(
+                commandText: "DeleteAccount",
+                parameters: parameters,
+                commandType: CommandType.StoredProcedure,
+                cancellationToken: cancellationToken
+            );
+
+            await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
         }
     }
 }
