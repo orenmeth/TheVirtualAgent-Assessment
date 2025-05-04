@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Transactions;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
 
@@ -29,16 +30,16 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             return await connection.QueryAsync<TransactionDto>("GetTransactionsByAccountCode", parameters, commandType: CommandType.StoredProcedure);
         }
 
-        public async Task UpsertTransactionAsync(int? code, int accountCode, DateTime transactionDate, DateTime captureDate, decimal amount, string description, CancellationToken cancellationToken)
+        public async Task UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
-            parameters.Add("@code", code);
-            parameters.Add("@account_code", accountCode);
-            parameters.Add("@transaction_date", transactionDate);
-            parameters.Add("@capture_date", captureDate);
-            parameters.Add("@amount", amount);
-            parameters.Add("@description", description);
+            parameters.Add("@code", transaction.Code);
+            parameters.Add("@account_code", transaction.Account_Code);
+            parameters.Add("@transaction_date", transaction.Transaction_Date);
+            parameters.Add("@capture_date", transaction.Capture_Date);
+            parameters.Add("@amount", transaction.Amount);
+            parameters.Add("@description", transaction.Description);
 
             await connection.ExecuteAsync("UpsertTransaction", parameters, commandType: CommandType.StoredProcedure);
         }

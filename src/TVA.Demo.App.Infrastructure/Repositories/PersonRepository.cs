@@ -11,7 +11,6 @@ namespace TVA.Demo.App.Infrastructure.Repositories
         private readonly IConnectionFactory _connectionFactory = connectionFactory;
         private readonly IDbConnectionProvider _dbConnectionProvider = dbConnectionProvider;
 
-
         public async Task<IEnumerable<PersonDto>> GetPersonsAsync(CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
@@ -27,14 +26,14 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             return await connection.QuerySingleOrDefaultAsync<PersonDto>("GetPerson", parameters, commandType: CommandType.StoredProcedure);
         }
 
-        public async Task UpsertPersonAsync(int? code, string name, string surname, string idNumber, CancellationToken cancellationToken)
+        public async Task UpsertPersonAsync(PersonDto person, CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
-            parameters.Add("@code", code);
-            parameters.Add("@name", name);
-            parameters.Add("@surname", surname);
-            parameters.Add("@id_number", idNumber);
+            parameters.Add("@code", person.Code);
+            parameters.Add("@name", person.Name);
+            parameters.Add("@last_name", person.Surname);
+            parameters.Add("@id_number", person.Id_Number);
 
             await connection.ExecuteAsync("UpsertPerson", parameters, commandType: CommandType.StoredProcedure);
         }

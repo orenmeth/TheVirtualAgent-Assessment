@@ -24,6 +24,7 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddTransient<IPersonService, PersonService>();
 builder.Services.AddTransient<IAccountService, AccountService>();
+builder.Services.AddTransient<ITransactionService, TransactionService>();
 
 builder.Services.AddCors(options =>
 {

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models;
 
@@ -51,7 +50,7 @@ namespace TVA.Demo.App.Api.Controllers
         }
 
         [HttpGet("GetPerson/{code}")]
-        public async Task<IActionResult> GetPersonByCode(int code, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPersonByCodeAsync(int code, CancellationToken cancellationToken)
         {
             try
             {
@@ -61,6 +60,33 @@ namespace TVA.Demo.App.Api.Controllers
             {
                 _logger.LogError(ex, "Error occurred while fetching person with code {Code}.", code);
                 return BadRequest(code);
+            }
+        }
+
+        [HttpGet("DeletePerson/{code}")]
+        public async Task<IActionResult> DeletePersonAsync(int code, CancellationToken cancellationToken)
+        {
+            try {
+                await _personService.DeletePersonAsync(code, cancellationToken);
+                return Ok();
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex, "Error occurred while upserting person.");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("UpsertPerson")]
+        public async Task<IActionResult> UpsertPersonAsync (Person person, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return Ok(await _personService.UpsertPersonAsync(person, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while upserting person.");
+                return BadRequest(person);
             }
         }
     }

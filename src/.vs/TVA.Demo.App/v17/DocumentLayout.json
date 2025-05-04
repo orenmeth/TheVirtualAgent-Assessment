@@ -3,12 +3,56 @@
   "WorkspaceRootPath": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A21C97CB-6841-4F10-B184-D7670D0896B0}|TVA.Demo.App.Domain\\TVA.Demo.App.Domain.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.domain\\interfaces\\idapperwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A21C97CB-6841-4F10-B184-D7670D0896B0}|TVA.Demo.App.Domain\\TVA.Demo.App.Domain.csproj|solutionrelative:tva.demo.app.domain\\interfaces\\idapperwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A21C97CB-6841-4F10-B184-D7670D0896B0}|TVA.Demo.App.Domain\\TVA.Demo.App.Domain.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.domain\\interfaces\\idbconnectionprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A21C97CB-6841-4F10-B184-D7670D0896B0}|TVA.Demo.App.Domain\\TVA.Demo.App.Domain.csproj|solutionrelative:tva.demo.app.domain\\interfaces\\idbconnectionprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.infrastructure\\repositories\\dapperwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|solutionrelative:tva.demo.app.infrastructure\\repositories\\dapperwrapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.infrastructure\\repositories\\personrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|solutionrelative:tva.demo.app.infrastructure\\repositories\\personrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\interfaces\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\interfaces\\iaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\services\\accountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.infrastructure\\repositories\\transactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|solutionrelative:tva.demo.app.infrastructure\\repositories\\transactionrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.infrastructure\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{82DF3757-334A-4D2F-A84F-0257E2714AC0}|TVA.Demo.App.Infrastructure\\TVA.Demo.App.Infrastructure.csproj|solutionrelative:tva.demo.app.infrastructure\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\services\\personservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\services\\personservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +62,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 22,
+          "SelectedChildIndex": 23,
           "Children": [
             {
               "$type": "Bookmark",
@@ -110,28 +154,171 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PersonController.cs",
-              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBAAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "IDbConnectionProvider.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Domain\\Interfaces\\IDbConnectionProvider.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Domain\\Interfaces\\IDbConnectionProvider.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Domain\\Interfaces\\IDbConnectionProvider.cs",
+              "RelativeToolTip": "TVA.Demo.App.Domain\\Interfaces\\IDbConnectionProvider.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-29T19:40:37.018Z",
+              "WhenOpened": "2025-05-04T09:10:40.413Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "IDapperWrapper.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Domain\\Interfaces\\IDapperWrapper.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Domain\\Interfaces\\IDapperWrapper.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Domain\\Interfaces\\IDapperWrapper.cs",
+              "RelativeToolTip": "TVA.Demo.App.Domain\\Interfaces\\IDapperWrapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T09:09:58.588Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DapperWrapper.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\DapperWrapper.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Infrastructure\\Repositories\\DapperWrapper.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\DapperWrapper.cs",
+              "RelativeToolTip": "TVA.Demo.App.Infrastructure\\Repositories\\DapperWrapper.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T09:09:16.197Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IAccountService.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Interfaces\\IAccountService.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Application\\Interfaces\\IAccountService.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Interfaces\\IAccountService.cs",
+              "RelativeToolTip": "TVA.Demo.App.Application\\Interfaces\\IAccountService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:52:34.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "TransactionRepository.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\TransactionRepository.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Infrastructure\\Repositories\\TransactionRepository.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\TransactionRepository.cs",
+              "RelativeToolTip": "TVA.Demo.App.Infrastructure\\Repositories\\TransactionRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:52:15.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AccountRepository.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\AccountRepository.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Infrastructure\\Repositories\\AccountRepository.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\AccountRepository.cs",
+              "RelativeToolTip": "TVA.Demo.App.Infrastructure\\Repositories\\AccountRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB4AAABlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:52:08.311Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PersonRepository.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\PersonRepository.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Infrastructure\\Repositories\\PersonRepository.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Infrastructure\\Repositories\\PersonRepository.cs",
+              "RelativeToolTip": "TVA.Demo.App.Infrastructure\\Repositories\\PersonRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:52:04.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TransactionService.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\TransactionService.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Application\\Services\\TransactionService.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\TransactionService.cs",
+              "RelativeToolTip": "TVA.Demo.App.Application\\Services\\TransactionService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAACEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:51:56.714Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AccountService.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\AccountService.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Application\\Services\\AccountService.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\AccountService.cs",
+              "RelativeToolTip": "TVA.Demo.App.Application\\Services\\AccountService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:51:46.697Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "PersonService.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\PersonService.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Application\\Services\\PersonService.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Application\\Services\\PersonService.cs",
+              "RelativeToolTip": "TVA.Demo.App.Application\\Services\\PersonService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:51:38.578Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "TransactionController.cs",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-28T20:20:45.577Z",
+              "WhenOpened": "2025-05-04T08:51:16.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:50:16.262Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PersonController.cs",
+              "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
+              "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
+              "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
+              "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwDQAAABsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T08:37:36.076Z",
               "EditorCaption": ""
             }
           ]

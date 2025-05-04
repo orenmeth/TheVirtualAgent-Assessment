@@ -13,6 +13,7 @@ namespace TVA.Demo.App.Application.Services
         private readonly IAccountRepository _accountRepository = accountRepository;
         private readonly ITransactionRepository _transactionRepository = transactionRepository;
         private readonly IMemoryCache _cache = cache;
+
         private const string AccountsCacheKey = "AccountsData";
         private const string AccountCacheKey = "AccountData";
         private const string AccountTransactionsCacheKey = "AccountTransactionsData";
@@ -124,6 +125,37 @@ namespace TVA.Demo.App.Application.Services
             };
 
             return account;
+        }
+
+        public async Task DeleteAccountAsync(int code, CancellationToken cancellationToken)
+        {
+            string accountCacheKey = $"{AccountCacheKey}_Code_{code}";
+            string accountTransactionsCacheKey = $"{AccountTransactionsCacheKey}_Code_{code}";
+
+            _cache.Remove(accountCacheKey);
+            _cache.Remove(accountTransactionsCacheKey);
+            InvalidateAccountsCache();
+
+            await _accountRepository.DeleteAccountAsync(code, cancellationToken);
+        }
+
+        public async Task<Account> UpsertAccountAsync(Account account, CancellationToken cancellationToken)
+        {
+            AccountDto accountDto = new()
+            {
+                Code = account.Code,
+                Person_Code = account.PersonCode,
+                Account_Number = account.AccountNumber,
+                Outstanding_Balance = account.OutstandingBalance
+            };
+
+            await _accountRepository.UpsertAccountAsync(accountDto, cancellationToken);
+
+            InvalidateAccountsCache();
+            string accountCacheKey = $"{AccountCacheKey}_Code_{account.Code}";
+            _cache.Remove(accountCacheKey);
+
+            return await GetAccountAsync(account.Code, cancellationToken);
         }
 
         private void InvalidateAccountsCache()

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
+using TVA.Demo.App.Domain.Models;
 
 namespace TVA.Demo.App.Api.Controllers
 {
@@ -11,7 +12,7 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly IAccountService _accountService = accountService;
 
         [HttpGet("GetAccount/{code}")]
-        public async Task<IActionResult> GetAccountByCode(int code, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAccountByCodeAsync(int code, CancellationToken cancellationToken)
         {
             try
             {
@@ -21,6 +22,35 @@ namespace TVA.Demo.App.Api.Controllers
             {
                 _logger.LogError(ex, "Error occurred while fetching account with code {Code}.", code);
                 return BadRequest(code);
+            }
+        }
+
+        [HttpGet("DeleteAccount/{code}")]
+        public async Task<IActionResult> DeleteAccountAsync(int code, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _accountService.DeleteAccountAsync(code, cancellationToken);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while upserting account.");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("UpsertAccount")]
+        public async Task<IActionResult> UpsertAccountAsync(Account account, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return Ok(await _accountService.UpsertAccountAsync(account, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while upserting account.");
+                return BadRequest(account);
             }
         }
     }

@@ -13,6 +13,7 @@ namespace TVA.Demo.App.Application.Services
         private readonly IPersonRepository _personRepository = personRepository;
         private readonly IAccountRepository _accountRepository = accountRepository;
         private readonly IMemoryCache _cache = cache;
+
         private const string PersonsCacheKey = "PersonsData";
         private const string PersonCacheKey = "PersonData";
         private const string PersonAccountsCacheKey = "PersonAccountsData";
@@ -24,12 +25,12 @@ namespace TVA.Demo.App.Application.Services
             IEnumerable<PersonDto>? personDtos;
             if (_cache.TryGetValue(cacheKey, out List<PersonDto>? cachedPersons))
             {
-                personDtos = cachedPersons;   
+                personDtos = cachedPersons;
             }
             else
             {
                 personDtos = await _personRepository.GetPersonsAsync(cancellationToken);
-                
+
                 var cacheEntryOptions = new MemoryCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
@@ -115,6 +116,38 @@ namespace TVA.Demo.App.Application.Services
             Person person = new() { Code = personDto.Code, Name = personDto.Name, Surname = personDto.Surname, IdNumber = personDto.Id_Number, Accounts = accounts };
 
             return person;
+        }
+
+        public async Task DeletePersonAsync(int code, CancellationToken cancellationToken)
+        {
+            string personCacheKey = $"{PersonCacheKey}_Code_{code}";
+            string personAccountsCacheKey = $"{PersonAccountsCacheKey}_Code_{code}";
+
+            _cache.Remove(personCacheKey);
+            _cache.Remove(personAccountsCacheKey);
+
+            InvalidatePersonsCache();
+
+            await _personRepository.DeletePersonAsync(code, true, cancellationToken);
+        }
+
+        public async Task<Person> UpsertPersonAsync(Person person, CancellationToken cancellationToken)
+        {
+            PersonDto personDto = new()
+            {
+                Code = person.Code,
+                Name = person.Name,
+                Surname = person.Surname,
+                Id_Number = person.IdNumber
+            };
+
+            await _personRepository.UpsertPersonAsync(personDto, cancellationToken);
+
+            InvalidatePersonsCache();
+            string personCacheKey = $"{PersonCacheKey}_Code_{person.Code}";
+            _cache.Remove(personCacheKey);
+
+            return await GetPersonAsync(person.Code, cancellationToken);
         }
 
         private void InvalidatePersonsCache()
