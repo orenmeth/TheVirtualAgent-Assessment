@@ -1,10 +1,12 @@
 ﻿using Azure;
 using Microsoft.Extensions.Caching.Memory;
+using System.Globalization;
 using TVA.Demo.App.Application.Extensions;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
-using TVA.Demo.App.Domain.Models;
+using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Application.Services
 {
@@ -14,8 +16,9 @@ namespace TVA.Demo.App.Application.Services
         private readonly IMemoryCache _cache = cache;
         private const string TransactionsCacheKey = "TransactionsData";
         private const string TransactionCacheKey = "TransactionData";
+        private const string AccountTransactionsCacheKey = "AccountTransactionsData";
 
-        public async Task<List<Transaction>> GetTransactionsByAccountCodeAsync(int accountCode, CancellationToken cancellationToken)
+        public async Task<List<TransactionResponse>> GetTransactionsByAccountCodeAsync(int accountCode, CancellationToken cancellationToken)
         {
             string cacheKey = $"{TransactionsCacheKey}_AccountCode_{accountCode}";
 
@@ -43,7 +46,7 @@ namespace TVA.Demo.App.Application.Services
             }
 
             var transactions = transactionDtos
-                .Select(t => new Transaction
+                .Select(t => new TransactionResponse
                 {
                     Code = t.Code,
                     AccountCode = t.Account_Code,
@@ -57,7 +60,7 @@ namespace TVA.Demo.App.Application.Services
             return transactions;
         }
 
-        public async Task<Transaction> GetTransactionAsync(int code, CancellationToken cancellationToken)
+        public async Task<TransactionResponse> GetTransactionAsync(int code, CancellationToken cancellationToken)
         {
             string transactionCacheKey = $"{TransactionCacheKey}_Code_{code}";
 
@@ -84,7 +87,7 @@ namespace TVA.Demo.App.Application.Services
                 throw new RequestFailedException($"Transaction with code {code} not found.");
             }
 
-            var transaction = new Transaction
+            var transaction = new TransactionResponse
             {
                 Code = transactionDto.Code,
                 AccountCode = transactionDto.Account_Code,
@@ -97,15 +100,6 @@ namespace TVA.Demo.App.Application.Services
             return transaction;
         }
 
-        private void InvalidateTransactionsCache()
-        {
-            var keysToRemove = _cache.GetKeysStartingWith(TransactionsCacheKey).ToList();
-            foreach (var key in keysToRemove)
-            {
-                _cache.Remove(key);
-            }
-        }
-
         public async Task DeleteTransactionAsync(int code, CancellationToken cancellationToken)
         {
             string transactionCacheKey = $"{TransactionCacheKey}_Code_{code}";
@@ -115,25 +109,40 @@ namespace TVA.Demo.App.Application.Services
             await _transactionRepository.DeleteTransactionAsync(code, cancellationToken);
         }
 
-        public async Task<Transaction> UpsertTransactionAsync(Transaction transaction, CancellationToken cancellationToken)
+        public async Task<TransactionResponse> UpsertTransactionAsync(TransactionRequest transaction, CancellationToken cancellationToken)
         {
             TransactionDto transactionDto = new()
             {
                 Code = transaction.Code,
                 Account_Code = transaction.AccountCode,
-                Transaction_Date = transaction.TransactionDate,
-                Capture_Date = transaction.CaptureDate,
+                Transaction_Date = DateTime.Parse(transaction.TransactionDate, CultureInfo.InvariantCulture),
+                Capture_Date = DateTime.UtcNow,
                 Amount = transaction.Amount,
                 Description = transaction.Description!
             };
 
-            await _transactionRepository.UpsertTransactionAsync(transactionDto, cancellationToken);
+            var returnCode = await _transactionRepository.UpsertTransactionAsync(transactionDto, cancellationToken);
 
             InvalidateTransactionsCache();
-            string transactionCacheKey = $"{TransactionCacheKey}_Code_{transaction.Code}";
-            _cache.Remove(transactionCacheKey);
+            InvalidateTransactionCache(returnCode);
+            InvalidateAccountTransactionsCache(transaction.AccountCode);
 
-            return await GetTransactionAsync(transaction.Code, cancellationToken);
+            return await GetTransactionAsync(returnCode, cancellationToken);
+        }
+
+        private void InvalidateTransactionsCache()
+        {
+            _cache.Remove(TransactionsCacheKey);
+        }
+
+        private void InvalidateTransactionCache(int transactionCode)
+        {
+            _cache.Remove($"{TransactionCacheKey}_Code_{transactionCode}");
+        }
+
+        private void InvalidateAccountTransactionsCache(int accountCode)
+        {
+            _cache.Remove($"{AccountTransactionsCacheKey}_Code_{accountCode}");
         }
     }
 }

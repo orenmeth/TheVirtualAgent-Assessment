@@ -5,6 +5,8 @@ using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
 using TVA.Demo.App.Domain.Models;
+using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Application.Services
 {
@@ -18,7 +20,7 @@ namespace TVA.Demo.App.Application.Services
         private const string PersonCacheKey = "PersonData";
         private const string PersonAccountsCacheKey = "PersonAccountsData";
 
-        public async Task<List<Person>> GetPersonsAsync(CancellationToken cancellationToken)
+        public async Task<List<PersonResponse>> GetPersonsAsync(CancellationToken cancellationToken)
         {
             string cacheKey = $"{PersonsCacheKey}";
 
@@ -46,20 +48,19 @@ namespace TVA.Demo.App.Application.Services
             }
 
             var persons = personDtos
-                .Select(p => new Person
+                .Select(p => new PersonResponse
                 {
                     Code = p.Code,
                     Name = p.Name,
                     Surname = p.Surname,
-                    IdNumber = p.Id_Number,
-                    Accounts = []
+                    IdNumber = p.Id_Number
                 })
                 .ToList();
 
             return persons;
         }
 
-        public async Task<Person> GetPersonAsync(int code, CancellationToken cancellationToken)
+        public async Task<PersonResponse> GetPersonAsync(int code, CancellationToken cancellationToken)
         {
             string personCacheKey = $"{PersonCacheKey}_Code_{code}";
             string personAccountsCacheKey = $"{PersonAccountsCacheKey}_Code_{code}";
@@ -104,7 +105,7 @@ namespace TVA.Demo.App.Application.Services
             }
 
             var accounts = accountDtos!
-                .Select(a => new Account
+                .Select(a => new AccountResponse
                 {
                     Code = a.Code,
                     PersonCode = a.Person_Code,
@@ -113,7 +114,7 @@ namespace TVA.Demo.App.Application.Services
                 })
                 .ToList();
 
-            Person person = new() { Code = personDto.Code, Name = personDto.Name, Surname = personDto.Surname, IdNumber = personDto.Id_Number, Accounts = accounts };
+            PersonResponse person = new() { Code = personDto.Code, Name = personDto.Name, Surname = personDto.Surname, IdNumber = personDto.Id_Number, Accounts = accounts };
 
             return person;
         }
@@ -131,32 +132,38 @@ namespace TVA.Demo.App.Application.Services
             await _personRepository.DeletePersonAsync(code, true, cancellationToken);
         }
 
-        public async Task<Person> UpsertPersonAsync(Person person, CancellationToken cancellationToken)
+        public async Task<PersonResponse> UpsertPersonAsync(PersonRequest person, CancellationToken cancellationToken)
         {
             PersonDto personDto = new()
             {
                 Code = person.Code,
                 Name = person.Name,
                 Surname = person.Surname,
-                Id_Number = person.IdNumber
+                Id_Number = person.IdNumber,
             };
 
-            await _personRepository.UpsertPersonAsync(personDto, cancellationToken);
+            var returnCode = await _personRepository.UpsertPersonAsync(personDto, cancellationToken);
 
             InvalidatePersonsCache();
-            string personCacheKey = $"{PersonCacheKey}_Code_{person.Code}";
-            _cache.Remove(personCacheKey);
+            InvalidatePersonCache(returnCode);
+            InvalidatePersonAccountsCache(returnCode);
 
-            return await GetPersonAsync(person.Code, cancellationToken);
+            return await GetPersonAsync(returnCode, cancellationToken);
         }
 
         private void InvalidatePersonsCache()
         {
-            var keysToRemove = _cache.GetKeysStartingWith(PersonsCacheKey).ToList();
-            foreach (var key in keysToRemove)
-            {
-                _cache.Remove(key);
-            }
+            _cache.Remove(PersonsCacheKey);
+        }
+
+        private void InvalidatePersonCache(int personCode)
+        {
+            _cache.Remove($"{PersonCacheKey}_Code_{personCode}");
+        }
+
+        private void InvalidatePersonAccountsCache(int personCode)
+        {
+            _cache.Remove($"{PersonAccountsCacheKey}_Code_{personCode}");
         }
     }
 }

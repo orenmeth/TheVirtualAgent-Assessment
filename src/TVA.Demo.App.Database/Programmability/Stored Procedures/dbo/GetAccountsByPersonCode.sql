@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[GetAccountByPersonCode]
+﻿CREATE PROCEDURE [dbo].[GetAccountsByPersonCode]
     @person_code INT
 AS
 BEGIN

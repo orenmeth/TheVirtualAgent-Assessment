@@ -41,17 +41,19 @@ namespace TVA.Demo.App.Infrastructure.Repositories
                 cancellationToken: cancellationToken
             );
 
-            return await _dapperWrapper.QueryAsync<AccountDto>(connection, commandDefinition);
+            var accounts = await _dapperWrapper.QueryAsync<AccountDto>(connection, commandDefinition);
+            return accounts ?? [];
         }
 
-        public async Task UpsertAccountAsync(AccountDto account, CancellationToken cancellationToken)
+        public async Task<int> UpsertAccountAsync(AccountDto account, CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
-            parameters.Add("@code", account.Code);
-            parameters.Add("@person_code", account.Person_Code);
-            parameters.Add("@account_number", account.Account_Number);
-            parameters.Add("@outstanding_balance", account.Outstanding_Balance);
+            parameters.Add("@code", account.Code, DbType.Int32);
+            parameters.Add("@person_code", account.Person_Code, DbType.Int32);
+            parameters.Add("@account_number", account.Account_Number, DbType.String);
+            parameters.Add("@outstanding_balance", account.Outstanding_Balance, DbType.Decimal);
+            parameters.Add("@RETURN_CODE", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var commandDefinition = new CommandDefinition(
                 commandText: "UpsertAccount",
@@ -61,6 +63,8 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             );
 
             await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
+            int returnCode = parameters.Get<int>("@RETURN_CODE");
+            return returnCode;
         }
 
         public async Task DeleteAccountAsync(int code, CancellationToken cancellationToken)

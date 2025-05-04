@@ -44,16 +44,16 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             return await _dapperWrapper.QueryAsync<TransactionDto>(connection, commandDefinition);
         }
 
-        public async Task UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken)
+        public async Task<int> UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
             parameters.Add("@code", transaction.Code);
             parameters.Add("@account_code", transaction.Account_Code);
             parameters.Add("@transaction_date", transaction.Transaction_Date);
-            parameters.Add("@capture_date", transaction.Capture_Date);
             parameters.Add("@amount", transaction.Amount);
             parameters.Add("@description", transaction.Description);
+            parameters.Add("@RETURN_CODE", DbType.Int32, direction: ParameterDirection.Output);
 
             var commandDefinition = new CommandDefinition(
                 commandText: "UpsertTransaction",
@@ -63,6 +63,9 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             );
 
             await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
+            var returnCode = parameters.Get<int>("@RETURN_CODE");
+
+            return returnCode;
         }
 
         public async Task DeleteTransactionAsync(int code, CancellationToken cancellationToken)

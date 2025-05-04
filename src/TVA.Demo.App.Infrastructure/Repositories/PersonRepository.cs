@@ -41,14 +41,15 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             return await _dapperWrapper.QuerySingleOrDefaultAsync<PersonDto>(connection, commandDefinition);
         }
 
-        public async Task UpsertPersonAsync(PersonDto person, CancellationToken cancellationToken)
+        public async Task<int> UpsertPersonAsync(PersonDto person, CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
-            parameters.Add("@code", person.Code);
-            parameters.Add("@name", person.Name);
-            parameters.Add("@last_name", person.Surname);
-            parameters.Add("@id_number", person.Id_Number);
+            parameters.Add("@code", person.Code, DbType.Int32);
+            parameters.Add("@first_name", person.Name, DbType.String);
+            parameters.Add("@last_name", person.Surname, DbType.String);
+            parameters.Add("@id_number", person.Id_Number, DbType.String);
+            parameters.Add("@RETURN_CODE", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var commandDefinition = new CommandDefinition(
                 commandText: "UpsertPerson",
@@ -58,6 +59,8 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             );
 
             await _dapperWrapper.ExecuteAsync(connection, commandDefinition);
+            int returnCode = parameters.Get<int>("@RETURN_CODE");
+            return returnCode;
         }
 
         public async Task DeletePersonAsync(int code, bool deleteRelatedAccounts, CancellationToken cancellationToken)

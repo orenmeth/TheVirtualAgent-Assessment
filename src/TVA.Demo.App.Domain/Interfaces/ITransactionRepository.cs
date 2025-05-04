@@ -7,6 +7,6 @@ namespace TVA.Demo.App.Domain.Interfaces
         Task DeleteTransactionAsync(int code, CancellationToken cancellationToken);
         Task<TransactionDto?> GetTransactionAsync(int code, CancellationToken cancellationToken);
         Task<IEnumerable<TransactionDto>> GetTransactionsByAccountCodeAsync(int accountCode, CancellationToken cancellationToken);
-        Task UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken);
+        Task<int> UpsertTransactionAsync(TransactionDto transaction, CancellationToken cancellationToken);
     }
 }

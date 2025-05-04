@@ -6,24 +6,22 @@ export const usePersonsStore = defineStore('personsStore', () => {
     const persons = ref([]);
     const loading = ref(false);
     const person = ref(null);
+    const totalItems = ref(0);
     const error = ref(null);
 
-    async function getPersons(sortBy, descending, page = 1, pageSize = 10, filter = null) {
+    async function getPersons(sortBy, filter, descending, page = 1, pageSize = 10) {
       loading.value = true;
       error.value = null;
       try {
-        const response = await api.get(`/Person/GetPersons/page/${page}/pageSize/${pageSize}/sortBy/${sortBy}/descending/${descending}`);
-        persons.value = response.data.items.filter(item => {
-          if (!filter) return true;
-          if (item.name.toLowerCase().includes(filter.toLowerCase())) return true;
-          if (item.surname.toLowerCase().includes(filter.toLowerCase())) return true;
-          if (item.idNumber.toLowerCase().includes(filter.toLowerCase())) return true;
-        }).sort((a, b) => a - b);
-        if (descending) {
-          persons.value.reverse();
-        }
+        let url = `/Person/GetPersons/page/${page}/pageSize/${pageSize}/descending/${descending}/sortBy/${sortBy}/filter/${filter}`;
+        const response = await api.get(url);
+        persons.value = response.data.items
+        totalItems.value = response.data.totalItems;
       } catch (error) {
         console.error('Error fetching persons:', error);
+        persons.value = [];
+        totalItems.value = 0;
+        error.value = error;
       } finally {
         loading.value = false;
       }
@@ -44,24 +42,23 @@ export const usePersonsStore = defineStore('personsStore', () => {
       }
     }
 
-    async function upsertPerson(personData) {
+    async function savePerson(personData) {
       loading.value = true;
       error.value = null;
 
       const existingPersonIndex = persons.value.findIndex(p => p.code === personData.code);
 
       try {
-          const response = await api.post(`/persons/upsert`, personData);
-
-          if (existingPersonIndex > -1) {
-              persons.value[existingPersonIndex] = response.data;
-          } else {
-              persons.value.push(response.data);
-          }
-          person.value = response.data;
-          return response.data;
-      }
-       catch (error) {
+        if (personData.code === '' || personData.code === null || personData.code === 'null') {
+          personData.code = 0;
+        }
+        await api.post(`/Person/UpsertPerson`, personData);
+        if (existingPersonIndex > -1) {
+          persons.value[existingPersonIndex] = personData;
+        } else {
+          persons.value.push(personData);
+        }
+      } catch (error) {
         if (existingPersonIndex > -1) {
           console.error('Error updating person:', error);
         } else {
@@ -93,9 +90,10 @@ export const usePersonsStore = defineStore('personsStore', () => {
       loading,
       person,
       error,
+      totalItems,
       getPersons,
       getPersonByCode,
       deletePerson,
-      upsertPerson,
+      savePerson,
     };
 });

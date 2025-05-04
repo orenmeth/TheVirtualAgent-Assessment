@@ -3,19 +3,19 @@ import { ref } from 'vue';
 import { api } from 'boot/axios';
 
 export const useAccountsStore = defineStore('AccountsStore', () => {
-  const Accounts = ref([]);
+  const accounts = ref([]);
   const totalItems = ref(0);
   const loading = ref(false);
   const error = ref(null);
 
-  async function fetchAccounts(page = 1, pageSize = 10) {
+  async function getAccounts(page = 1, pageSize = 10) {
     loading.value = true;
     error.value = null;
 
     try {
       const response = await api.get(`/Account/GetAccounts/page/${page}/pageSize/${pageSize}`);
       if (response.status === 200) {
-        Accounts.value = response.data.items;
+        accounts.value = response.data.items;
         totalItems.value = response.data.totalItems;
       } else {
         error.value = `Failed to fetch Accounts: HTTP status ${response.status}`;
@@ -27,7 +27,7 @@ export const useAccountsStore = defineStore('AccountsStore', () => {
     }
   }
 
-  async function fetchAccountByCode(code) {
+  async function getAccountByCode(code) {
     loading.value = true;
     error.value = null;
 
@@ -45,13 +45,37 @@ export const useAccountsStore = defineStore('AccountsStore', () => {
     }
   }
 
+  async function saveAccount(accountData) {
+    loading.value = true;
+    error.value = null;
+
+    const existingAccountIndex = accounts.value.findIndex(a => a.code === accountData.code);
+
+    try {
+      if (accountData.code === '' || accountData.code === null || accountData.code === 'null') {
+        accountData.code = 0;
+      }
+      await api.post(`/Account/UpsertAccount`, accountData);        
+      if (existingAccountIndex > -1) {
+        accounts.value[existingAccountIndex] = accountData;
+      } else {
+        accounts.value.push(accountData);
+      }
+    } catch (err) {
+      error.value = `Failed to save Account: ${err.message}`;
+    } finally {
+      loading.value = false;
+    }
+  }
+
   return {
-    Accounts,
+    accounts,
     totalItems,
     loading,
     error,
-    fetchAccounts,
-    fetchAccountByCode,
+    getAccounts,
+    getAccountByCode,
+    saveAccount,
   };
 });
 

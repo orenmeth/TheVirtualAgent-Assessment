@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models;
+using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Api.Controllers
 {
@@ -11,8 +13,14 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly ILogger<PersonController> _logger = logger;
         private readonly IPersonService _personService = personService;
 
-        [HttpGet("GetPersons/page/{page}/pageSize/{pageSize}/sortBy/{sortBy}/descending/{descending}")]
-        public async Task<IActionResult> GetPersonsAsync(CancellationToken cancellationToken, [FromRoute] string sortBy, [FromRoute] int page = 1, [FromRoute] int pageSize = 10, [FromRoute] bool descending = false)
+        [HttpGet("GetPersons/page/{page}/pageSize/{pageSize}/descending/{descending}/sortBy/{sortBy}/filter/{filter}")]
+        public async Task<IActionResult> GetPersonsAsync(
+            [FromRoute] string sortBy,
+            [FromRoute] string filter, 
+            [FromRoute] int page = 1,
+            [FromRoute] int pageSize = 10,
+            [FromRoute] bool descending = false,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -23,15 +31,34 @@ namespace TVA.Demo.App.Api.Controllers
 
                 var queryablePersons = await _personService.GetPersonsAsync(cancellationToken);
 
+                if (queryablePersons.Count > 0 && !string.IsNullOrEmpty(filter) && !string.Equals(filter, "null", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryablePersons = [.. queryablePersons.Where(q =>
+                    {
+                        if (q.Name!.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+                            q.Surname!.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+                            q.IdNumber!.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    })];
+                }
+
+                if (string.IsNullOrEmpty(sortBy) || string.Equals(sortBy, "null", StringComparison.OrdinalIgnoreCase))
+                {
+                    sortBy = nameof(PersonRequest.Code);
+                }
+
                 var orderedPersons = queryablePersons.OrderBy(p =>
                 {
                     var propertyInfo = p.GetType().GetProperties().FirstOrDefault(q => string.Equals(q.Name, sortBy, StringComparison.OrdinalIgnoreCase));
-                    if (propertyInfo == null)
-                    {
-                        throw new ArgumentException($"Property '{sortBy}' not found on type '{p.GetType().Name}'.");
-                    }
-
-                    return propertyInfo.GetValue(p);
+                    return propertyInfo == null
+                        ? throw new ArgumentException($"Property '{sortBy}' not found on type '{p.GetType().Name}'.")
+                        : propertyInfo.GetValue(p);
                 }).ToList();
 
                 if (descending)
@@ -48,7 +75,7 @@ namespace TVA.Demo.App.Api.Controllers
 
                 var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
-                var response = new PagedResponse<Person>
+                var response = new PagedResponse<PersonResponse>
                 {
                     Items = personsOnPage,
                     TotalItems = totalItems,
@@ -62,7 +89,7 @@ namespace TVA.Demo.App.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while fetching persons.");
-                return BadRequest(Enumerable.Empty<Person>());
+                return BadRequest(Enumerable.Empty<PersonResponse>());
             }
         }
 
@@ -94,7 +121,7 @@ namespace TVA.Demo.App.Api.Controllers
         }
 
         [HttpPost("UpsertPerson")]
-        public async Task<IActionResult> UpsertPersonAsync (Person person, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpsertPersonAsync (PersonRequest person, CancellationToken cancellationToken)
         {
             try
             {

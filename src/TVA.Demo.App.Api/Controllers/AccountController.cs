@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
-using TVA.Demo.App.Domain.Models;
+using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Api.Controllers
 {
@@ -41,7 +42,7 @@ namespace TVA.Demo.App.Api.Controllers
         }
 
         [HttpPost("UpsertAccount")]
-        public async Task<IActionResult> UpsertAccountAsync(Account account, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpsertAccountAsync(AccountRequest account, CancellationToken cancellationToken)
         {
             try
             {

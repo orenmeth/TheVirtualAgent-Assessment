@@ -1,12 +1,13 @@
-﻿using TVA.Demo.App.Domain.Models;
+﻿using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Application.Interfaces
 {
     public interface IPersonService
     {
-        Task<List<Person>> GetPersonsAsync(CancellationToken cancellationToken);
-        Task<Person> GetPersonAsync(int code, CancellationToken cancellationToken);
+        Task<List<PersonResponse>> GetPersonsAsync(CancellationToken cancellationToken);
+        Task<PersonResponse> GetPersonAsync(int code, CancellationToken cancellationToken);
         Task DeletePersonAsync(int code, CancellationToken cancellationToken);
-        Task<Person> UpsertPersonAsync(Person person, CancellationToken cancellationToken);
+        Task<PersonResponse> UpsertPersonAsync(PersonRequest person, CancellationToken cancellationToken);
     }
 }

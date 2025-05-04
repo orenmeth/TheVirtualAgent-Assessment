@@ -56,7 +56,7 @@ import TableButtons from 'src/components/TableActions.vue'
 
 const router = useRouter()
 const personsStore = usePersonsStore()
-const filter = ref('')
+const filter = ref(null)
 const mode = ref('list')
 const fullscreen = ref(false)
 
@@ -78,7 +78,7 @@ const pagination = ref({
 
 const onRequest = (props) => {
   const { page, rowsPerPage, sortBy, descending } = props.pagination
-  personsStore.getPersons(sortBy, descending, page, rowsPerPage, filter.value)
+  personsStore.getPersons(sortBy, filter.value, descending, page, rowsPerPage)
   pagination.value.page = page
   pagination.value.rowsPerPage = rowsPerPage
   pagination.value.rowsNumber = personsStore.totalItems
@@ -87,7 +87,7 @@ const onRequest = (props) => {
 }
 
 onMounted(() => {
-  personsStore.getPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
+  personsStore.getPersons(pagination.value.sortBy, filter.value, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage)
   pagination.value.rowsNumber = personsStore.totalItems
 })
 
@@ -109,9 +109,11 @@ function handleAdd() {
 }
 
 function handleFilter(newFilter) {
-  filter.value = newFilter
-  personsStore.getPersons(pagination.value.sortBy, pagination.value.descending, pagination.value.page, pagination.value.rowsPerPage, filter.value)
-  console.log('Filter applied:', newFilter)
+  if (newFilter === '' || newFilter === null) {
+    filter.value = 'null'
+  } else {
+    filter.value = newFilter
+  }
 }
 </script>
 

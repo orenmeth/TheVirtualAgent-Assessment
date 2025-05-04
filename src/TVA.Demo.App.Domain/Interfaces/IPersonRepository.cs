@@ -6,7 +6,7 @@ namespace TVA.Demo.App.Domain.Interfaces
     {
         Task<PersonDto?> GetPersonAsync(int code, CancellationToken cancellationToken);
         Task<IEnumerable<PersonDto>> GetPersonsAsync(CancellationToken cancellationToken);
-        Task UpsertPersonAsync(PersonDto person, CancellationToken cancellationToken);
+        Task<int> UpsertPersonAsync(PersonDto person, CancellationToken cancellationToken);
         Task DeletePersonAsync(int code, bool deleteRelatedAccounts, CancellationToken cancellationToken);
     }
 }

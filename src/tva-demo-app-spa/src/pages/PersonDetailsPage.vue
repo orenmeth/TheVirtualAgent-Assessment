@@ -94,7 +94,7 @@ const accountColumns = ref([
 const fetchPersonDetails = async (id) => {
   loading.value = true;
   try {
-    const person = await personsStore.fetchPersonByCode(id);
+    const person = await personsStore.getPersonByCode(id);
     if (person) {
       personForm.value = {
         code: person.code,
@@ -127,16 +127,12 @@ onMounted(() => {
   }
 });
 
-const savePersonDetails = async () => { // Make savePersonDetails async
+const savePersonDetails = async () => {
   loading.value = true;
   try {
-    if (personId.value) {
-      // await personsStore.updatePerson(personId.value, personForm.value); // Adjust the method name in store
-      $q.notify({ type: 'positive', message: 'Person details updated successfully!' });
-    } else {
-      // await personsStore.createPerson(personForm.value);  // Adjust the method name in store
-      $q.notify({ type: 'positive', message: 'New person created successfully!' });
-    }
+    await personsStore.savePerson(personForm.value);
+    $q.notify({ type: 'positive', message: 'Person details updated successfully!' });
+    await personsStore.getPersons('code', null, false, 1, 10);
     router.push({ name: 'persons' });
   } catch (error) {
     console.error('Error saving person details:', error);

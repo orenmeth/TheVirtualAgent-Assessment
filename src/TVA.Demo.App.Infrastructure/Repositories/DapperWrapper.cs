@@ -1,12 +1,6 @@
 ﻿using Dapper;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
 
 namespace TVA.Demo.App.Infrastructure.Repositories

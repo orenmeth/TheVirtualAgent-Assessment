@@ -18,19 +18,6 @@
     flat
     round
     dense
-    :icon="isFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-    @click="toggleFullscreen"
-    v-if="showFullscreen"
-  >
-    <q-tooltip :disable="$q.platform.is.mobile">
-      {{ isFullscreen ? 'Exit Fullscreen' : 'Toggle Fullscreen' }}
-    </q-tooltip>
-  </q-btn>
-
-  <q-btn
-    flat
-    round
-    dense
     :icon="mode === 'grid' ? 'list' : 'grid_on'"
     @click="toggleMode"
     v-if="showLayout"
@@ -81,9 +68,6 @@ const props = defineProps({
   onSearch: {
     type: Function,
   },
-  onFullscreenToggle: {
-    type: Function,
-  },
   onLayoutToggle: {
     type: Function,
   },
@@ -111,22 +95,11 @@ const emit = defineEmits([
 
 const filter = ref('')
 const mode = ref('list')
-const isFullscreen = ref(false)
 
 const onAdd = () => {
   emit('add')
   if (props.onAdd) {
     props.onAdd()
-  }
-}
-
-const toggleFullscreen = () => {
-  const newIsFullscreen = !isFullscreen.value
-  isFullscreen.value = newIsFullscreen
-  emit('update:isFullscreen', newIsFullscreen)
-  emit('fullscreen-toggle', newIsFullscreen)
-  if (props.onFullscreenToggle) {
-    props.onFullscreenToggle(newIsFullscreen)
   }
 }
 
@@ -192,6 +165,5 @@ function wrapCsvValue(val, formatFn) {
 
 defineExpose({
   mode,
-  isFullscreen,
 })
 </script>

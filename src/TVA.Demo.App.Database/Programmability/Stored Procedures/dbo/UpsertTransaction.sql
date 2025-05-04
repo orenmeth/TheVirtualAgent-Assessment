@@ -3,7 +3,8 @@
     @account_code INT,
     @transaction_date DATETIME,
     @amount MONEY,
-    @description VARCHAR(100)
+    @description VARCHAR(100),
+    @RETURN_CODE INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -20,11 +21,13 @@ BEGIN
                 [description] = @description
             WHERE
                 code = @code;
+            SET @RETURN_CODE = @code;
         END
         ELSE
         BEGIN
             INSERT INTO dbo.Transactions (account_code, transaction_date, capture_date, amount, [description])
             VALUES (@account_code, @transaction_date, GETUTCDATE(), @amount, @description);
+            SET @RETURN_CODE = SCOPE_IDENTITY();
         END
     END TRY
     BEGIN CATCH
@@ -38,6 +41,8 @@ BEGIN
             @ErrorState = ERROR_STATE();
 
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+        SET @RETURN_CODE = -1;
+        RETURN -1;
     END CATCH
 END
 GO

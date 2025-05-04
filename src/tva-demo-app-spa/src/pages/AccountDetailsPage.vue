@@ -63,11 +63,14 @@
       </div>
     </div>
 
-    <TransactionDialog
-      v-model:show="transactionDialog"
-      :transaction="transactionForm"
-      @save="handleSaveTransaction"
-    />
+    <q-dialog v-model="transactionDialog">
+      <TransactionDialog
+        v-model:show="transactionDialog"
+        :transaction="transactionForm"
+        @save="handleSaveTransaction"
+        @update:modelValue="transactionDialog = $event"
+      />
+    </q-dialog>
   </q-page>
 </template>
 
@@ -119,7 +122,7 @@ const transactionForm = ref({
 const fetchAccountByCode = async (id) => {
   loading.value = true;
   try {
-    const account = await accountsStore.fetchAccountByCode(id);
+    const account = await accountsStore.getAccountByCode(id);
     if (account) {
       accountForm.value = {
         code: account.code,
@@ -175,14 +178,9 @@ watch(() => route.params.accountId, () => {
 const saveAccountDetails = async () => {
   loading.value = true;
   try {
-    const payload = {
-      ...accountForm.value,
-      openingDate: accountForm.value.openingDate ? accountForm.value.openingDate.toISOString() : null,
-    };
-    // Call store action to update account details
-    await accountsStore.updateAccountDetails(accountId.value, payload);
+    await accountsStore.saveAccount(accountForm.value);
     $q.notify({ type: 'positive', message: 'Account details updated successfully!' });
-    router.push({ name: 'accounts' });
+    router.push({ name: 'person_details', params: { personId: accountForm.value.personCode } })
   } catch (error) {
     console.error('Error saving account details:', error);
     $q.notify({
@@ -203,65 +201,28 @@ function openTransactionDialog() {
     amount: null,
     description: '',
   };
-
-  this.$q.dialog({
-    title: 'Add New Transaction',
-    message: 'Enter the transaction details below.',
-    component: TransactionDialog,
-    componentProps: {
-      modelValue: true,
-      transaction: transactionForm.value,
-    },
-    persistent: true,
-    onDismiss: () => {
-      console.log('Dialog dismissed');
-    },
-    onOk: async () => {
-      console.log('Dialog OK, data:');
-      await handleSaveTransaction();
-    },
-  });
+  transactionDialog.value = true
 }
 
 function editTransaction(transaction) {
   transactionForm.value = { ...transaction };
-
-  this.$q.dialog({
-    title: 'Edit Transaction',
-    message: 'Edit the transaction details below.',
-    component: TransactionDialog,
-    componentProps: {
-      modelValue: true,
-      transaction: transactionForm.value,
-    },
-    onCancel: () => {
-      console.log('Dialog dismissed');
-    },
-    persistent: true,
-    onOk: async () => {
-      console.log('Dialog OK, data:', transactionForm.value);
-      await this.handleSaveTransaction();
-    },
-  });
+  transactionDialog.value = true
 }
 
-async function handleSaveTransaction(formData) {
-  alert('Saving transaction...', formData);
+async function handleSaveTransaction(transaction) {
   try {
-    if (formData.code) {
-      await transactionsStore.updateTransaction(accountId.value, formData.code, formData);
-      $q.notify({ type: 'positive', message: 'Transaction updated' });
-    } else {
-      await transactionsStore.addTransaction(accountId.value, formData);
-      $q.notify({ type: 'positive', message: 'Transaction added' });
-    }
+    console.log('handleSaveTransaction:', transaction);
+    let transactionModel = transaction;
+    delete transactionModel.captureDate;
+    console.log('handleSaveTransaction:', transactionModel);
+    await transactionsStore.saveTransaction(transactionModel);
+    $q.notify({ type: 'positive', message: 'Transaction updated' });
     fetchAccountByCode(accountId.value);
   } catch (error) {
     console.error('Error saving transaction', error);
     $q.notify({ type: 'error', message: 'Failed to save transaction' });
   }
   finally {
-    $q.dialog.hide();
     transactionDialog.value = false;
   }
 }

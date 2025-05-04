@@ -11,7 +11,7 @@ using TVA.Demo.App.Api.Controllers;
 using TVA.Demo.App.Application.Services;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
-using TVA.Demo.App.Domain.Models;
+using TVA.Demo.App.Domain.Models.Responses;
 using TVA.Demo.App.Infrastructure.Repositories;
 
 namespace TVA.Demo.App.Api.T1.Tests.Controllers
@@ -57,9 +57,11 @@ namespace TVA.Demo.App.Api.T1.Tests.Controllers
             return new PersonController(logger, personService);
         }
 
-        [TestCase("Code", 1, 10, false)]
-        [TestCase("Code", 1, 10, true)]
-        public async Task GetPersonsAsync_GivenValidArguments_ShouldReturnOkWithPersons(string sortBy, int page, int pageSize, bool descending)
+        [TestCase("Code", "null", 1, 10, false)]
+        [TestCase("Code", "null", 1, 10, true)]
+        [TestCase("Code", "null", 2, 10, false)]
+        [TestCase("Code", "null", 2, 10, true)]
+        public async Task GetPersonsAsync_GivenValidArguments_ShouldReturnOkWithPersons(string sortBy, string filter, int page, int pageSize, bool descending)
         {
             // Arrange
             var dapperWrapper = Substitute.For<IDapperWrapper>();
@@ -87,21 +89,21 @@ namespace TVA.Demo.App.Api.T1.Tests.Controllers
             var cancellationToken = new CancellationToken();
 
             // Act
-            var result = await controller.GetPersonsAsync(cancellationToken, sortBy, page, pageSize, descending);
+            var result = await controller.GetPersonsAsync(sortBy, filter, page, pageSize, descending, cancellationToken);
 
             // Assert
             result.Should().BeOfType<OkObjectResult>();
             var okResult = result as OkObjectResult;
 
             okResult.Should().NotBeNull();
-            okResult.Value.Should().BeOfType<PagedResponse<Person>>();
+            okResult.Value.Should().BeOfType<PagedResponse<PersonResponse>>();
 
-            var pagedResponse = (PagedResponse<Person>)okResult.Value;
+            var pagedResponse = (PagedResponse<PersonResponse>)okResult.Value;
             pagedResponse.CurrentPage.Should().Be(page);
             pagedResponse.TotalItems.Should().Be(15);
             pagedResponse.TotalPages.Should().Be(2);
             pagedResponse.PageSize.Should().Be(pageSize);
-            pagedResponse.Items.Should().BeOfType<List<Person>>();
+            pagedResponse.Items.Should().BeOfType<List<PersonResponse>>();
 
             if (descending)
             {

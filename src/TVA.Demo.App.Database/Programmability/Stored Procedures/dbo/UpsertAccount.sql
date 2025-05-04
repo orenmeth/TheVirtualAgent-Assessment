@@ -2,7 +2,8 @@
     @code INT = NULL,
     @person_code INT,
     @account_number VARCHAR(50),
-    @outstanding_balance MONEY
+    @outstanding_balance DECIMAL(18, 2),
+    @RETURN_CODE INT OUTPUT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -14,14 +15,16 @@ BEGIN
             SET
                 person_code = @person_code,
                 account_number = @account_number,
-                outstanding_balance = @outstanding_balance
+                outstanding_balance = CAST(@outstanding_balance AS MONEY)
             WHERE
                 code = @code;
+            SET @RETURN_CODE = @code;
         END
         ELSE
         BEGIN
             INSERT INTO dbo.Accounts (person_code, account_number, outstanding_balance)
-            VALUES (@person_code, @account_number, @outstanding_balance);
+            VALUES (@person_code, @account_number, CAST(@outstanding_balance AS MONEY));
+            SET @RETURN_CODE = SCOPE_IDENTITY();
         END
     END TRY
     BEGIN CATCH
@@ -35,6 +38,8 @@ BEGIN
             @ErrorState = ERROR_STATE();
 
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+        SET @RETURN_CODE = -1;
+        RETURN -1;
     END CATCH
 END
 GO
