@@ -162,6 +162,9 @@
 
 <script setup>
 import { ref } from "vue";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar();
 
 const leftDrawerOpen = ref(true);
 const isDrawerMinimized = ref(false);
@@ -173,7 +176,7 @@ function toggleLeftDrawer() {
 }
 
 function logoutNotify() {
-  this.$q.notify({
+  $q.notify({
       message: "Logged out"
     });
 }
@@ -213,13 +216,12 @@ body {
 }
 
 .header_normal {
-  /* background-color: rgb(121, 182, 118); */
   background-color: rgb(73, 92, 95);
   color: white;
 }
 
 .header_dark {
-  /* background-color: rgb(32, 33, 33); */
+
   background-color: rgb(31, 29, 28);
   color: white;
 }

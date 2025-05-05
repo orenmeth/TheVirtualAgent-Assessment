@@ -15,7 +15,7 @@
               <q-input outlined v-model="accountForm.outstandingBalance" label="Outstanding Balance" />
               <div class="q-mt-md">
                 <q-btn type="submit" color="primary" :label="accountId ? 'Save Changes' : 'Create Account'" />
-                <q-btn flat class="q-ml-sm" @click="$router.go(-1)">Cancel</q-btn>
+                <q-btn flat class="q-ml-sm" @click="$router.go(-1)">Close</q-btn>
               </div>
             </q-form>
           </q-card-section>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useAccountsStore } from 'src/stores/accountsStore';
@@ -89,6 +89,7 @@ const router = useRouter();
 const accountsStore = useAccountsStore();
 const transactionsStore = useTransactionsStore();
 const accountId = ref(route.params.accountId);
+const personId = ref(route.params.personId);
 
 const loading = ref(false);
 const accountForm = ref({
@@ -167,11 +168,11 @@ onMounted(() => {
   if (accountId.value) {
     fetchAccountByCode(accountId.value);
   }
-});
-
-watch(() => route.params.accountId, () => {
-  if (route.params.accountId) {
-    fetchAccountByCode(route.params.accountId);
+  if (personId.value) {
+    accountForm.value = {
+      ...accountForm.value,
+      personCode: personId.value,
+    }
   }
 });
 

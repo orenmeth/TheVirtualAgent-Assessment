@@ -25,15 +25,26 @@
         </template>
 
         <template v-slot:body-cell-actions="props">
-          <q-btn
-            class="q-mr-xs"
-            color="primary"
-            flat
-            icon="more_vert"
-            @click="navigateToPersonDetails(props.row)"
-          >
-            <q-tooltip>View/Edit</q-tooltip>
-          </q-btn>
+          <div class="q-gutter-xs">
+            <q-btn
+              class="q-mr-xs"
+              color="primary"
+              flat dense round
+              icon="edit"
+              @click="navigateToPersonDetails(props.row)"
+            >
+              <q-tooltip>View/Edit</q-tooltip>
+            </q-btn>
+
+            <q-btn
+              color="negative"
+              flat dense round
+              icon="delete"
+              @click="handleDeletePerson(props.row)"
+            >
+              <q-tooltip>Delete Person</q-tooltip>
+            </q-btn>
+          </div>
         </template>
 
         <template v-slot:loading>
@@ -53,12 +64,14 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { usePersonsStore } from 'src/stores/personsStore'
 import TableButtons from 'src/components/TableActions.vue'
+import { useQuasar } from 'quasar'
 
 const router = useRouter()
 const personsStore = usePersonsStore()
 const filter = ref(null)
 const mode = ref('list')
 const fullscreen = ref(false)
+const $q = useQuasar()
 
 const columns = ref([
   { name: 'code', required: true, label: 'Code', align: 'left', field: 'code', sortable: true },
@@ -114,6 +127,31 @@ function handleFilter(newFilter) {
   } else {
     filter.value = newFilter
   }
+  pagination.value.page = 1;
+  onRequest({ pagination: pagination.value });
+}
+
+function handleDeletePerson(person) {
+  $q.dialog({
+    title: 'Delete Person',
+    message: `Are you sure you want to delete ${person.name} ${person.surname}?`,
+    cancel: true,
+    persistent: true,
+  }).onOk(() => {
+    personsStore.deletePerson(person.code)
+      .then(() => {
+        $q.notify({
+          type: 'positive',
+          message: 'Person deleted successfully',
+        })
+      })
+      .catch((error) => {
+        $q.notify({
+          type: 'negative',
+          message: `Error deleting person: ${error.message}`,
+        })
+      })
+  })
 }
 </script>
 

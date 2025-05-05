@@ -90,12 +90,14 @@
     <Build Include="Programmability\Stored Procedures\dbo\DeletePerson.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\UpsertTransaction.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\GetTransactionsByAccountCode.sql" />
+    <Build Include="Tables\dbo\AccountStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Presets\dbo\AccountPresets.sql" />
     <None Include="Presets\dbo\PersonPresets.sql" />
     <None Include="Presets\dbo\TransactionPresets.sql" />
     <None Include="TVA.Demo.App.Database.publish.xml" />
+    <None Include="Presets\dbo\AccountStatusPresets.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />

@@ -130,7 +130,12 @@ namespace TVA.Demo.App.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while upserting person.");
-                return BadRequest(person);
+                var error = new ErrorResponse<PersonRequest>
+                {
+                    Item = person,
+                    ErrorMessage = ex.Message
+                };
+                return BadRequest(error);
             }
         }
     }

@@ -28,7 +28,7 @@ const routes = [
     ]
   },
   {
-    path: '/account/:accountId?',
+    path: '/account/:accountId?/:personId?',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: 'account_details', component: AccountDetailsPage, props: true }

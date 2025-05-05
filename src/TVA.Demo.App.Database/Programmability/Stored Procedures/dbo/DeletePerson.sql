@@ -7,18 +7,21 @@ BEGIN
 
     BEGIN TRY
         IF NOT EXISTS (SELECT 1 FROM dbo.Persons WHERE code = @code)
+        AND NOT EXISTS (SELECT 1 FROM dbo.Accounts WHERE person_code = @code AND outstanding_balance > 0)
+
         BEGIN
             RAISERROR('Person code not found.', 16, 1);
             RETURN;
         END
 
-        IF @delete_related_accounts_and_transactions = 1
+        -- Do not delete the accounts, just mark them as closed
+        IF @delete_related_accounts_and_transactions = 1 -- Close 
         BEGIN
-            DELETE FROM dbo.Transactions
-            WHERE account_code IN (SELECT code FROM dbo.Accounts WHERE person_code = @code);
-
             DELETE FROM dbo.Accounts
             WHERE person_code = @code;
+
+            DELETE FROM dbo.Transactions
+            WHERE account_code IN (SELECT code FROM dbo.Accounts WHERE person_code = @code);
         END
 
         DELETE FROM dbo.Persons
