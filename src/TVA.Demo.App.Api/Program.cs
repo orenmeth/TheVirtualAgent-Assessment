@@ -21,6 +21,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IDapperWrapper, DapperWrapper>();
 
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IAccountStatusRepository, AccountStatusRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 

@@ -91,6 +91,8 @@
     <Build Include="Programmability\Stored Procedures\dbo\UpsertTransaction.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\GetTransactionsByAccountCode.sql" />
     <Build Include="Tables\dbo\AccountStatus.sql" />
+    <Build Include="Programmability\Stored Procedures\dbo\GetAccountStatuses.sql" />
+    <Build Include="Tables\dbo\AccountsAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Presets\dbo\AccountPresets.sql" />

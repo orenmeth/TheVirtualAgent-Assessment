@@ -1,17 +1,16 @@
 ﻿using Azure;
 using Microsoft.Extensions.Caching.Memory;
-using TVA.Demo.App.Application.Extensions;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
-using TVA.Demo.App.Domain.Models;
 using TVA.Demo.App.Domain.Models.Requests;
 using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Application.Services
 {
-    public class AccountService(IAccountRepository accountRepository, ITransactionRepository transactionRepository, IMemoryCache cache) : IAccountService
+    public class AccountService(IAccountStatusRepository accountStatusRepository, IAccountRepository accountRepository, ITransactionRepository transactionRepository, IMemoryCache cache) : IAccountService
     {
+        private readonly IAccountStatusRepository _accountStatusRepository = accountStatusRepository;
         private readonly IAccountRepository _accountRepository = accountRepository;
         private readonly ITransactionRepository _transactionRepository = transactionRepository;
         private readonly IMemoryCache _cache = cache;
@@ -20,6 +19,7 @@ namespace TVA.Demo.App.Application.Services
         private const string AccountCacheKey = "AccountData";
         private const string AccountTransactionsCacheKey = "AccountTransactionsData";
         private const string PersonAccountsCacheKey = "PersonAccountsData";
+        private const string AccountStatusCacheKey = "AccountStatusData";
 
         public async Task<List<AccountResponse>> GetAccountsByPersonCodeAsync(int personCode, CancellationToken cancellationToken)
         {
@@ -124,6 +124,7 @@ namespace TVA.Demo.App.Application.Services
                 PersonCode = accountDto.Person_Code,
                 AccountNumber = accountDto.Account_Number,
                 OutstandingBalance = accountDto.Outstanding_Balance,
+                AccountStatusId = accountDto.Account_Status_Id,
                 Transactions = transactions
             };
 
@@ -149,7 +150,8 @@ namespace TVA.Demo.App.Application.Services
                 Code = account.Code,
                 Person_Code = account.PersonCode,
                 Account_Number = account.AccountNumber,
-                Outstanding_Balance = account.OutstandingBalance
+                Outstanding_Balance = account.OutstandingBalance,
+                Account_Status_Id = account.AccountStatusId
             };
 
             var returnCode = await _accountRepository.UpsertAccountAsync(accountDto, cancellationToken);
@@ -160,7 +162,46 @@ namespace TVA.Demo.App.Application.Services
             InvalidateAccountTransactionsCache(returnCode);
             InvalidatePersonAccountsCache(newAccount!.Person_Code);
 
-            return await GetAccountAsync(account.Code, cancellationToken);
+            return await GetAccountAsync(newAccount.Code, cancellationToken);
+        }
+
+        public async Task<List<AccountStatusResponse>> GetAccountStatusesAsync(CancellationToken cancellationToken)
+        {
+            string cacheKey = $"{AccountStatusCacheKey}";
+
+            IEnumerable<AccountStatusDto>? accountStatusDtos;
+
+            if (_cache.TryGetValue(cacheKey, out List<AccountStatusDto>? cachedAccountStatuses))
+            {
+                accountStatusDtos = cachedAccountStatuses;
+            }
+            else
+            {
+                accountStatusDtos = await _accountStatusRepository.GetAccountStatusesAsync(cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(cacheKey, accountStatusDtos, cacheEntryOptions);
+            }
+
+            if (accountStatusDtos == null || !accountStatusDtos.Any())
+            {
+                return [];
+            }
+
+            var accountStatuses = accountStatusDtos
+                .Select(a => new AccountStatusResponse
+                {
+                    Id = a.Id,
+                    Description = a.Description!
+                })
+                .ToList();
+
+            return accountStatuses;
         }
 
         private void InvalidateAccountsCache()

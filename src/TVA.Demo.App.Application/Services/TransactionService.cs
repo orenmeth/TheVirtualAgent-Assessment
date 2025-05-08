@@ -17,6 +17,7 @@ namespace TVA.Demo.App.Application.Services
         private const string TransactionsCacheKey = "TransactionsData";
         private const string TransactionCacheKey = "TransactionData";
         private const string AccountTransactionsCacheKey = "AccountTransactionsData";
+        private const string AccountCacheKey = "AccountData";
 
         public async Task<List<TransactionResponse>> GetTransactionsByAccountCodeAsync(int accountCode, CancellationToken cancellationToken)
         {
@@ -126,6 +127,7 @@ namespace TVA.Demo.App.Application.Services
             InvalidateTransactionsCache();
             InvalidateTransactionCache(returnCode);
             InvalidateAccountTransactionsCache(transaction.AccountCode);
+            InvalidateAccountCache(transaction.AccountCode);
 
             return await GetTransactionAsync(returnCode, cancellationToken);
         }
@@ -143,6 +145,11 @@ namespace TVA.Demo.App.Application.Services
         private void InvalidateAccountTransactionsCache(int accountCode)
         {
             _cache.Remove($"{AccountTransactionsCacheKey}_Code_{accountCode}");
+        }
+
+        private void InvalidateAccountCache(int accountCode)
+        {
+            _cache.Remove($"{AccountCacheKey}_Code_{accountCode}");
         }
     }
 }

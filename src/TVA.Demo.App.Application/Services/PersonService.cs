@@ -110,7 +110,8 @@ namespace TVA.Demo.App.Application.Services
                     Code = a.Code,
                     PersonCode = a.Person_Code,
                     AccountNumber = a.Account_Number,
-                    OutstandingBalance = a.Outstanding_Balance
+                    OutstandingBalance = a.Outstanding_Balance,
+                    AccountStatusId = a.Account_Status_Id
                 })
                 .ToList();
 

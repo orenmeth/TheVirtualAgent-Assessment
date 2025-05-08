@@ -15,7 +15,8 @@ BEGIN
             a.code,
             a.person_code,
             a.account_number,
-            a.outstanding_balance
+            a.outstanding_balance,
+            a.account_status_id
         FROM
             dbo.Accounts a WITH(NOLOCK)
         WHERE

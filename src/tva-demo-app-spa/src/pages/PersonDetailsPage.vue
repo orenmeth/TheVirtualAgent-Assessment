@@ -13,20 +13,26 @@
               <q-input
                 outlined
                 v-model="personForm.name"
+                hint="Enter a valid first name."
+                clearable
                 label="Name"
-                :rules="[(val) => val.length <= 50 || 'Name must be less than 50 characters']"
+                :rules="[isNotMoreThanMaxLength(50)]"
               />
               <q-input
                 outlined
                 v-model="personForm.surname"
+                hint="Enter a valid surname."
+                clearable
                 label="Surname"
-                :rules="[(val) => val.length <= 50 || 'Surname must be less than 50 characters']"
+                :rules="[isNotMoreThanMaxLength(50)]"
               />
               <q-input
                 outlined
                 v-model="personForm.idNumber"
+                hint="Enter a valid ID number."
+                clearable
                 label="ID Number"
-                :rules="[(val) => val.length <= 50 || 'ID number must be less than 50 characters']"
+                :rules="[isRequired, isNotMoreThanMaxLength(50), isNotExistingIdNumber(personForm.code)]"
               />
 
               <div class="q-mt-md">
@@ -35,7 +41,15 @@
                   color="primary"
                   :label="personId ? 'Save Changes' : 'Create Person'"
                 />
-                <q-btn flat class="q-ml-sm" @click="$router.go(-1)">Close</q-btn>
+                <q-btn
+                  v-if="personForm.code && (personAccounts.length === 0 || personAccounts.filter(account => account.accountStatusId === 1).length === 0)"
+                  type="button"
+                  color="negative"
+                  label="Delete"
+                  class="q-ml-sm"
+                  @click="deletePerson"
+                />
+                <q-btn flat class="q-ml-sm" @click="$router.push({ name: 'persons' })">Close</q-btn>
               </div>
             </q-form>
           </q-card-section>
@@ -48,6 +62,7 @@
             <q-toolbar-title>Accounts</q-toolbar-title>
             <q-space />
             <q-btn
+              v-if="personForm.code"
               outline
               color="primary"
               label="Add New Account"
@@ -76,6 +91,20 @@
                 </q-btn>
               </template>
 
+              <template v-slot:body-cell-accountStatusId="props">
+                <q-td :props="props">
+                  <q-chip
+                    :color="props.row.accountStatusId === 1 ? 'green' : 'red'"
+                    :text-color="props.row.accountStatusId === 1 ? 'white' : 'black'"
+                    dense
+                    rounded
+                    class="text-weight-medium q-px-sm"
+                  >
+                  {{ accountsStore.accountStatuses.find((status) => status.id === props.row.accountStatusId)?.description || 'Unknown' }}
+                  </q-chip>
+                </q-td>
+              </template>
+
               <template v-slot:no-data>
                 <div class="text-center q-pa-md">No accounts found.</div>
               </template>
@@ -94,12 +123,15 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { usePersonsStore } from 'src/stores/personsStore'
+import { useAccountsStore } from 'src/stores/accountsStore'
+import { isRequired, isNotMoreThanMaxLength, isNotExistingIdNumber } from 'src/utils/validationRules'
 
 const $q = useQuasar()
 
 const route = useRoute()
 const router = useRouter()
 const personsStore = usePersonsStore()
+const accountsStore = useAccountsStore()
 const personId = ref(parseInt(route.params.personId, 10))
 const loading = ref(false)
 const personForm = ref({
@@ -132,6 +164,13 @@ const accountColumns = ref([
     field: 'outstandingBalance',
     sortable: true,
     format: (val) => parseFloat(val).toFixed(2),
+  },
+  {
+    name: 'accountStatusId',
+    label: 'Account Status',
+    align: 'center',
+    field: 'accountStatusId',
+    sortable: true,
   },
   { name: 'actions', label: 'Actions', field: 'actions', align: 'right' },
 ])
@@ -168,6 +207,9 @@ const fetchPersonDetails = async (id) => {
 
 onMounted(() => {
   if (personId.value) {
+    accountsStore.getAccountStatuses().then((statuses) => {
+      accountsStore.accountStatuses = statuses
+    })
     fetchPersonDetails(personId.value)
   }
 })
@@ -176,7 +218,7 @@ const savePersonDetails = async () => {
   loading.value = true
   try {
     await personsStore.savePerson(personForm.value)
-    $q.notify({ type: 'positive', message: 'Person details updated successfully!' })
+    $q.notify({ type: 'positive', message: 'Person details saved successfully!' })
     await personsStore.getPersons('code', null, false, 1, 10)
     router.push({ name: 'persons' })
   } catch (error) {
@@ -184,6 +226,23 @@ const savePersonDetails = async () => {
     $q.notify({
       type: 'error',
       message: 'Failed to save person details',
+    })
+  } finally {
+    loading.value = false
+  }
+}
+
+const deletePerson = async () => {
+  loading.value = true
+  try {
+    await personsStore.deletePerson(personForm.value.code)
+    $q.notify({ type: 'positive', message: 'Person deleted successfully!' })
+    router.push({ name: 'persons' })
+  } catch (error) {
+    console.error('Error deleting person:', error)
+    $q.notify({
+      type: 'error',
+      message: error,
     })
   } finally {
     loading.value = false
@@ -200,8 +259,4 @@ const navigateToAccountDetails = (account) => {
 </script>
 
 <style scoped>
-.q-table__middle > tbody > tr > td:last-child {
-  white-space: nowrap;
-  padding-right: 12px;
-}
 </style>

@@ -53,6 +53,7 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             parameters.Add("@person_code", account.Person_Code, DbType.Int32);
             parameters.Add("@account_number", account.Account_Number, DbType.String);
             parameters.Add("@outstanding_balance", account.Outstanding_Balance, DbType.Decimal);
+            parameters.Add("@account_status_id", account.Account_Status_Id, DbType.Int32);
             parameters.Add("@RETURN_CODE", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             var commandDefinition = new CommandDefinition(

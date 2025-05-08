@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models.Requests;
-using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Api.Controllers
 {
@@ -26,7 +25,21 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
-        [HttpGet("DeleteAccount/{code}")]
+        [HttpGet("GetAccountStatuses")]
+        public async Task<IActionResult> GetAccountStatusesAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                return Ok(await _accountService.GetAccountStatusesAsync(cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching account statuses.");
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete("DeleteAccount/{code}")]
         public async Task<IActionResult> DeleteAccountAsync(int code, CancellationToken cancellationToken)
         {
             try

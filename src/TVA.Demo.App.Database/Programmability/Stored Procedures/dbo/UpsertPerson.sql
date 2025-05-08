@@ -9,6 +9,18 @@ BEGIN
     SET NOCOUNT ON;
 
     BEGIN TRY
+    BEGIN TRANSACTION;
+        /*
+          Check if the ID number is valid
+          1. If we are inserting, check if the ID number already exists in the database.
+          2. If we are updating, check if the ID number already exists for another person.
+        */
+        IF EXISTS (SELECT 1 FROM dbo.Persons WHERE id_number = @id_number AND (@code IS NULL OR code != @code))
+        BEGIN
+            RAISERROR('ID number conflict. The provided ID number is already in use.', 16, 1);
+            RETURN;
+        END
+
         IF EXISTS (SELECT 1 FROM dbo.Persons WHERE code = @code)
         BEGIN
             UPDATE dbo.Persons
@@ -26,8 +38,12 @@ BEGIN
             VALUES (@first_name, @last_name, @id_number);
             SET @RETURN_CODE = SCOPE_IDENTITY();
         END
+    COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
         DECLARE @ErrorMessage NVARCHAR(4000);
         DECLARE @ErrorSeverity INT;
         DECLARE @ErrorState INT;

@@ -8,7 +8,9 @@
   constraint PK_Persons primary key clustered
   (
     code
-  )
+  ),
+
+  constraint UQ_Persons_id_number unique (id_number)
 )
 GO
 

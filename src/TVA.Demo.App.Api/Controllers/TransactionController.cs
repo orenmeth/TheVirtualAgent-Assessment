@@ -25,7 +25,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
-        [HttpGet("DeleteTransaction/{code}")]
+        [HttpDelete("DeleteTransaction/{code}")]
         public async Task<IActionResult> DeleteTransactionAsync(int code, CancellationToken cancellationToken)
         {
             try

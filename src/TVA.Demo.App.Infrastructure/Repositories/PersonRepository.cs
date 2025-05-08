@@ -67,8 +67,8 @@ namespace TVA.Demo.App.Infrastructure.Repositories
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var parameters = new DynamicParameters();
-            parameters.Add("@code", code);
-            parameters.Add("@delete_related_accounts_and_transactions", deleteRelatedAccounts);
+            parameters.Add("@code", code, DbType.Int32);
+            parameters.Add("@delete_related_accounts_and_transactions", deleteRelatedAccounts, DbType.Boolean);
 
             var commandDefinition = new CommandDefinition(
                 commandText: "DeletePerson",

@@ -25,7 +25,6 @@
           :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
         />
 
-        <q-btn flat round dense icon="search" class="q-mr-xs" />
         <q-btn
           flat
           round
@@ -56,7 +55,7 @@
         <div style="height: calc(100% - 117px);padding:10px;">
           <q-toolbar>
             <q-avatar>
-              <img alt="boy" src="https://cdn.quasar.dev/img/boy-avatar.png" />
+              <img alt="pam" src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
 
             <q-toolbar-title>P A M</q-toolbar-title>
@@ -74,11 +73,28 @@
                 v-ripple
               >
                 <q-item-section avatar>
-                  <q-icon name="dashboard" />
+                  <q-icon name="home" />
                 </q-item-section>
 
                 <q-item-section v-show="!isDrawerMinimized">
                   Home
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                active-class="tab-active"
+                to="/dashboard"
+                exact
+                class="q-ma-sm navigation-item"
+                clickable
+                v-ripple
+              >
+                <q-item-section avatar>
+                  <q-icon name="dashboard" />
+                </q-item-section>
+
+                <q-item-section v-show="!isDrawerMinimized">
+                  Dashboard
                 </q-item-section>
               </q-item>
 

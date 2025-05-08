@@ -12,5 +12,6 @@ Post-Deployment Script Template
 :r .\Security\Roles\ReadWrite_PI.sql
 
 :r .\Presets\dbo\PersonPresets.sql
+:r .\Presets\dbo\AccountStatusPresets.sql
 :r .\Presets\dbo\AccountPresets.sql
 :r .\Presets\dbo\TransactionPresets.sql

@@ -9,12 +9,11 @@
 
   constraint FK_Account_AccountStatus foreign key (account_status_id) references AccountStatus(Id),
 
-  constraint PK_Accounts primary key clustered
-  (
-    code
-  )
+  constraint UQ_Account_account_number unique (account_number),
+
+  constraint PK_Accounts primary key clustered (code)
 )
 GO
 
-CREATE UNIQUE NONCLUSTERED INDEX IX_Account_num ON [dbo].[Accounts](account_number)
+CREATE UNIQUE NONCLUSTERED INDEX IX_Account_accountnumber ON [dbo].[Accounts](account_number)
 GO

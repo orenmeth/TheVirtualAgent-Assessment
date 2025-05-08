@@ -19,7 +19,7 @@
 
       <q-btn
         to="/persons"
-        label="Go to Dashboard"
+        label="Go To Dashboard"
         color="primary"
         size="lg"
         icon-right="dashboard"

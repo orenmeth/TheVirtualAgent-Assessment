@@ -107,7 +107,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
-        [HttpGet("DeletePerson/{code}")]
+        [HttpDelete("DeletePerson/{code}")]
         public async Task<IActionResult> DeletePersonAsync(int code, CancellationToken cancellationToken)
         {
             try {

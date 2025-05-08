@@ -19,11 +19,7 @@
               class="absolute"
               style="top: 0; right: 25px; transform: translateY(-50%)"
             >
-              <img alt="boy" src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
-            <!-- <div class="row no-wrap items-center">
-              <div class="col text-h6 ellipsis">Log in to PAM</div>
-            </div> -->
           </q-card-section>
 
           <q-card-section>

@@ -63,7 +63,7 @@ export const usePersonsStore = defineStore('personsStore', () => {
           console.error('Error updating person:', error);
         } else {
           console.error('Error creating person:', error);
-        }          
+        }
         throw error;
       } finally {
           loading.value = false;
@@ -74,9 +74,16 @@ export const usePersonsStore = defineStore('personsStore', () => {
       loading.value = true;
       error.value = null;
       try {
-        await api.delete(`/persons/${code}`);
-        persons.value = this.persons.filter(p => p.code !== code);
-        person.value = null;
+        const person = await getPersonByCode(code);
+        console.log('Deleting person:', person);
+
+        if (person.accounts.length === 0 || person.accounts.filter((account) => account.accountStatusId === 1).length === 0) {
+          await api.delete(`/Person/DeletePerson/${code}`);
+          persons.value = this.persons.filter(p => p.code !== code);
+          person.value = null;
+        } else {
+          throw new Error('Cannot delete person with active accounts.');
+        }
       } catch (error) {
         console.error('Error deleting person:', error);
         throw error;
