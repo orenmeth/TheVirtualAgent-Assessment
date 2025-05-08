@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "c870924d-5313-4da8-8958-7160c1c4a158",
+		"name": "TVA Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Persons",
+			"item": [
+				{
+					"name": "GetPersons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Person/GetPersons/page/1/pageSize/10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Person",
+								"GetPersons",
+								"page",
+								"1",
+								"pageSize",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetPerson",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Person/GetPerson/11",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Person",
+								"GetPerson",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpsertPerson",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"code\": 0,\r\n  \"name\": \"Test1\",\r\n  \"surname\": \"User1\",\r\n  \"idNumber\": \"123456789001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Person/UpsertPerson",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Person",
+								"UpsertPerson"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "UpsertTransaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"code\": 48,\r\n  \"accountCode\": 8,\r\n  \"transactionDate\": \"2025-05-04\",\r\n  \"amount\": 123,\r\n  \"description\": \"Fine\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Transaction/UpsertTransaction",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Transaction",
+								"UpsertTransaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

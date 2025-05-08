@@ -1,0 +1,6 @@
+@TVA.Demo.App.Api_HostAddress = http://localhost:5217
+
+GET {{TVA.Demo.App.Api_HostAddress}}/person/
+Accept: application/json
+
+###

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseName>TVADemoDB</TargetDatabaseName>
+    <DeployScriptFileName>TVA.Demo.App.Database.sql</DeployScriptFileName>
+    <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockWhenDriftDetected>False</BlockWhenDriftDetected>
+    <RegisterDataTierApplication>False</RegisterDataTierApplication>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <DoNotEvaluateSqlCmdVariables>False</DoNotEvaluateSqlCmdVariables>
+    <ScriptDatabaseOptions>False</ScriptDatabaseOptions>
+    <TargetConnectionString>Data Source=localhost\sqlexpress;Integrated Security=True;Persist Security Info=False;Pooling=False;Multiple Active Result Sets=False;Connect Timeout=60;Encrypt=True;Trust Server Certificate=True;Command Timeout=0</TargetConnectionString>
+    <CreateNewDatabase>True</CreateNewDatabase>
+  </PropertyGroup>
+  <ItemGroup>
+    <SqlCmdVariable Include="TVAUserPassword">
+      <Value>0x020061E1677089FE3278023EA710BFB418059AE0287AE345D34569B2A27207BCE6BB2FB7377E3F3134CD072FADFFFD335057459A22DD23E0EE8428646E00754414BCDC13F6CB</Value>
+    </SqlCmdVariable>
+  </ItemGroup>
+</Project>
