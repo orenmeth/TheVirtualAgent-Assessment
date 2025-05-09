@@ -23,7 +23,6 @@ graph TD
         subgraph ApplicationServiceLayer["Application Layer"]
             direction TB
             Services["<i class='fas fa-cogs'></i> Application Services<br/>(Business Logic, Orchestration, Mapping)"]
-            %% Node SvcCache: Renamed from Cache
             SvcCache["<i class='fas fa-memory'></i> In-Memory Cache<br/>(IMemoryCache - Used by Services)"]
         end
 
@@ -37,28 +36,30 @@ graph TD
         %% Infrastructure Layer (Data Access, External Services)
         subgraph InfrastructureDataLayer["Infrastructure Layer"]
             direction TB
-            RepoImpl["<i class='fas fa-database'></i> Repository Implementations<br/>(PersonRepository - Dapper based)"]
-            %% Node AppDbContext: Renamed from DbContext
-            AppDbContext["<i class='fas fa-layer-group'></i> Dapper<br/>(Data Access Abstraction)"]
+            RepoImpl["<i class='fas fa-database'></i> Repository Implementations<br/>(PersonRepository, AccountRepository, TransactionRepository)"]
+            Dapper["<i class='fas fa-layer-group'></i> Dapper<br/>(Data Access Abstraction)"]
         end
     end
 
     %% === DATABASE PERSISTENCE ===
     subgraph DatabasePersistenceLayer["Database Layer"]
-        SQLDb["<i class='fas fa-database'></i> SQL Server Database<br/>(Tables: Persons, Accounts, etc.)"]
+        SQLDb["<i class='fas fa-database'></i> SQL Server Database<br/>(Tables: Persons, Accounts, Transactions)"]
+        StoredProcedures["<i class='fas fa-code'></i> Stored Procedures<br/>(GetPersons, GetPerson, UpsertPerson, etc.)"]
     end
 
     %% === DEFINE CONNECTIONS BETWEEN COMPONENTS ===
-    User      --> VueApp
+    User --> VueApp
 
-    VueApp    -- "HTTPS Requests<br/>(REST API Calls - JSON)" --> Controllers
+    VueApp -- "HTTPS Requests<br/>(REST API Calls - JSON)" --> Controllers
 
     Controllers --> Services
 
-    Services  -- "Uses / Returns" --> Entities
-    Services  -- "Calls Methods Of" --> RepoInterfaces
-    Services  -- "Reads from / Writes to" --> SvcCache
+    Services -- "Uses / Returns" --> Entities
+    Services -- "Calls Methods Of" --> RepoInterfaces
+    Services -- "Reads from / Writes to" --> SvcCache
 
     %% Implementation of Domain Interfaces by Infrastructure
-    RepoImpl  -- "Implements" --> RepoInterfaces
-    RepoImpl  -- "Uses" --> App
+    RepoImpl -- "Implements" --> RepoInterfaces
+    RepoImpl -- "Uses" --> Dapper
+    Dapper -- "Executes" --> StoredProcedures
+    StoredProcedures -- "Interacts With" --> SQLDb
