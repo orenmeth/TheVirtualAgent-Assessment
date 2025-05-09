@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     %% === USER INTERACTION ===
     subgraph UserLayer["User Interface Layer"]

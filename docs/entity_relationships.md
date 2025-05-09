@@ -1,3 +1,4 @@
+```mermaid
 erDiagram
     Persons {
         int Code PK "Person's unique identifier (Primary Key)"
