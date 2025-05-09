@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
       "RelativeMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|solutionrelative:TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
@@ -11,23 +23,11 @@
       "RelativeMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|solutionrelative:TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D673C29A-9BE9-4B21-9E7F-B99F75C3948D}|TVA.Demo.App.Application\\TVA.Demo.App.Application.csproj|solutionrelative:tva.demo.app.application\\services\\transactionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\transactioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{3E1AA826-C1B8-4A40-B021-D9E6E1C3060E}|..\\test\\t1\\TVA.Demo.App.Api.T1.Tests\\TVA.Demo.App.Api.T1.Tests.csproj|c:\\dev\\.offline\\thevirtualagent\\test\\t1\\tva.demo.app.api.t1.tests\\controllers\\transactioncontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|solutionrelative:tva.demo.app.api\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{08A3E63D-DADB-45F0-8662-6B6B4EBD2809}|TVA.Demo.App.Api\\TVA.Demo.App.Api.csproj|c:\\dev\\.offline\\thevirtualagent\\src\\tva.demo.app.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -55,7 +55,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 22,
+          "SelectedChildIndex": 24,
           "Children": [
             {
               "$type": "Bookmark",
@@ -147,7 +147,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "DeleteTransaction.sql ",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql",
               "RelativeDocumentMoniker": "TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql",
@@ -158,7 +158,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "DeleteAccount.sql ",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql",
               "RelativeDocumentMoniker": "TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql",
@@ -169,13 +169,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "PersonController.cs",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
               "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEoAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-09T08:05:20.054Z",
               "EditorCaption": ""
@@ -195,7 +195,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "TransactionControllerTests.cs",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\test\\t1\\TVA.Demo.App.Api.T1.Tests\\Controllers\\TransactionControllerTests.cs",
               "RelativeDocumentMoniker": "..\\test\\t1\\TVA.Demo.App.Api.T1.Tests\\Controllers\\TransactionControllerTests.cs",
@@ -208,20 +208,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "TransactionController.cs",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAAACYAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAACMAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-09T00:25:50.368Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\AccountController.cs",

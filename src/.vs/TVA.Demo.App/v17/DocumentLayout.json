@@ -38,14 +38,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{3E1AA826-C1B8-4A40-B021-D9E6E1C3060E}|..\\test\\t1\\TVA.Demo.App.Api.T1.Tests\\TVA.Demo.App.Api.T1.Tests.csproj|c:\\dev\\.offline\\thevirtualagent\\test\\t1\\tva.demo.app.api.t1.tests\\controllers\\personcontrollertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|solutionrelative:TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{A42AE741-E372-479B-95B9-A12A12A02CBB}|TVA.Demo.App.Database\\TVA.Demo.App.Database.sqlproj|solutionrelative:TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
     }
   ],
   "DocumentGroupContainers": [
@@ -148,7 +140,7 @@
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "DeleteTransaction.sql ",
+              "Title": "DeleteTransaction.sql",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql",
               "RelativeDocumentMoniker": "TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteTransaction.sql\r\nlocalhost\\sqlexpress.TVA.Demo.App.Database\r\n(MGSOPS\\OrenM)",
@@ -159,7 +151,7 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "DeleteAccount.sql ",
+              "Title": "DeleteAccount.sql",
               "DocumentMoniker": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql",
               "RelativeDocumentMoniker": "TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Database\\Programmability\\Stored Procedures\\dbo\\DeleteAccount.sql\r\nlocalhost\\sqlexpress.TVA.Demo.App.Database\r\n(MGSOPS\\OrenM)",
@@ -175,7 +167,7 @@
               "RelativeDocumentMoniker": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
               "ToolTip": "C:\\Dev\\.offline\\TheVirtualAgent\\src\\TVA.Demo.App.Api\\Controllers\\PersonController.cs",
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\PersonController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEcAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAADMAAAAAAAAAAAA7wEcAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-09T08:05:20.054Z",
               "EditorCaption": ""
@@ -190,8 +182,7 @@
               "RelativeToolTip": "TVA.Demo.App.Api\\Program.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAACoAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T07:10:55.023Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-09T07:10:55.023Z"
             },
             {
               "$type": "Document",
@@ -216,8 +207,7 @@
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\TransactionController.cs",
               "ViewState": "AgIAABkAAAAAAAAAAAAAACMAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T00:25:50.368Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-09T00:25:50.368Z"
             },
             {
               "$type": "Document",
@@ -229,8 +219,7 @@
               "RelativeToolTip": "TVA.Demo.App.Api\\Controllers\\AccountController.cs",
               "ViewState": "AgIAADsAAAAAAAAAAAAwwEwAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T00:11:38.184Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-09T00:11:38.184Z"
             },
             {
               "$type": "Document",
@@ -268,8 +257,7 @@
               "RelativeToolTip": "..\\test\\t1\\TVA.Demo.App.Api.T1.Tests\\Controllers\\PersonControllerTests.cs",
               "ViewState": "AgIAAAoAAAAAAAAAAAAkwDMAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T20:48:32.349Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T20:48:32.349Z"
             }
           ]
         },
