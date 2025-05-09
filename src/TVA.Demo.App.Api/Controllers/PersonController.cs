@@ -13,83 +13,38 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly ILogger<PersonController> _logger = logger;
         private readonly IPersonService _personService = personService;
 
-        [HttpGet("GetPersons/page/{page}/pageSize/{pageSize}/descending/{descending}/sortBy/{sortBy}/filter/{filter}")]
-        public async Task<IActionResult> GetPersonsAsync(
-            [FromRoute] string sortBy,
-            [FromRoute] string filter, 
-            [FromRoute] int page = 1,
-            [FromRoute] int pageSize = 10,
-            [FromRoute] bool descending = false,
-            CancellationToken cancellationToken = default)
+        [HttpGet("GetPersons")]
+        public async Task<IActionResult> GetPersonsAsync([FromQuery] GetPersonsRequest request, CancellationToken cancellationToken = default)
         {
             try
             {
-
-                if (page < 1) page = 1;
-                if (pageSize < 1) pageSize = 10;
-                if (pageSize > 100) pageSize = 100;
-
-                var queryablePersons = await _personService.GetPersonsAsync(cancellationToken);
-
-                if (queryablePersons.Count > 0 && !string.IsNullOrEmpty(filter) && !string.Equals(filter, "null", StringComparison.OrdinalIgnoreCase))
-                {
-                    queryablePersons = [.. queryablePersons.Where(q =>
-                    {
-                        if (q.Name!.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
-                            q.Surname!.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
-                            q.IdNumber!.Contains(filter, StringComparison.OrdinalIgnoreCase))
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    })];
-                }
-
-                if (string.IsNullOrEmpty(sortBy) || string.Equals(sortBy, "null", StringComparison.OrdinalIgnoreCase))
-                {
-                    sortBy = nameof(PersonRequest.Code);
-                }
-
-                var orderedPersons = queryablePersons.OrderBy(p =>
-                {
-                    var propertyInfo = p.GetType().GetProperties().FirstOrDefault(q => string.Equals(q.Name, sortBy, StringComparison.OrdinalIgnoreCase));
-                    return propertyInfo == null
-                        ? throw new ArgumentException($"Property '{sortBy}' not found on type '{p.GetType().Name}'.")
-                        : propertyInfo.GetValue(p);
-                }).ToList();
-
-                if (descending)
-                {
-                    orderedPersons.Reverse();
-                }
-
-                var totalItems = await Task.Run(() => queryablePersons.Count, cancellationToken);
-
-                var personsOnPage = await Task.Run(() => orderedPersons
-                    !.Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .ToList(), cancellationToken);
-
-                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+                var pagedResponse = await _personService.GetPersonsAsync(
+                    request.Filter,
+                    request.SortBy,
+                    request.Descending,
+                    request.Page,
+                    request.PageSize,
+                    cancellationToken);
 
                 var response = new PagedResponse<PersonResponse>
                 {
-                    Items = personsOnPage,
-                    TotalItems = totalItems,
-                    TotalPages = totalPages,
-                    CurrentPage = page,
-                    PageSize = pageSize
+                    Items = pagedResponse.Items,
+                    TotalItems = pagedResponse.TotalItems,
+                    CurrentPage = pagedResponse.CurrentPage,
+                    PageSize = pagedResponse.PageSize
                 };
 
                 return Ok(response);
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for GetPersons: {Message}", ex.Message);
+                return BadRequest(new ErrorResponse<GetPersonsRequest> { Item = request, ErrorMessage = ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while fetching persons.");
-                return BadRequest(Enumerable.Empty<PersonResponse>());
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse<GetPersonsRequest> { Item = request, ErrorMessage = "An unexpected error occurred while fetching persons." });
             }
         }
 
@@ -100,10 +55,15 @@ namespace TVA.Demo.App.Api.Controllers
             {
                 return Ok(await _personService.GetPersonAsync(code, cancellationToken));
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for GetPerson: {Message}", ex.Message);
+                return NotFound(new ErrorResponse<int> { Item = code, ErrorMessage = ex.Message });
+            }
             catch(Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while fetching person with code {Code}.", code);
-                return BadRequest(code);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse<int> { Item = code, ErrorMessage = "An unexpected error occurred while fetching person." });
             }
         }
 
@@ -114,9 +74,14 @@ namespace TVA.Demo.App.Api.Controllers
                 await _personService.DeletePersonAsync(code, cancellationToken);
                 return Ok();
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for DeletePerson: {Message}", ex.Message);
+                return NotFound(new ErrorResponse<int> { Item = code, ErrorMessage = ex.Message });
+            }
             catch (Exception ex) {
-                _logger.LogError(ex, "Error occurred while upserting person.");
-                return BadRequest();
+                _logger.LogError(ex, "Error occurred while deleting person with code {Code}.", code);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse<int> { Item = code, ErrorMessage = "An unexpected error occurred while deleting person." });
             }
         }
 
@@ -127,15 +92,15 @@ namespace TVA.Demo.App.Api.Controllers
             {
                 return Ok(await _personService.UpsertPersonAsync(person, cancellationToken));
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for UpsertPerson: {Message}", ex.Message);
+                return BadRequest(new ErrorResponse<PersonRequest> { Item = person, ErrorMessage = ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while upserting person.");
-                var error = new ErrorResponse<PersonRequest>
-                {
-                    Item = person,
-                    ErrorMessage = ex.Message
-                };
-                return BadRequest(error);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse<PersonRequest> { Item = person, ErrorMessage = "An unexpected error occurred while upserting person."});
             }
         }
     }

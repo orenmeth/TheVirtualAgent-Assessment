@@ -4,6 +4,6 @@ namespace TVA.Demo.App.Domain.Interfaces
 {
     public interface IAccountStatusRepository
     {
-        Task<IEnumerable<AccountStatusDto?>> GetAccountStatusesAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<AccountStatusDto>> GetAccountStatusesAsync(CancellationToken cancellationToken);
     }
 }

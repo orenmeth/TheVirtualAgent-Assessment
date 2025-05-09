@@ -5,7 +5,13 @@ namespace TVA.Demo.App.Application.Interfaces
 {
     public interface IPersonService
     {
-        Task<List<PersonResponse>> GetPersonsAsync(CancellationToken cancellationToken);
+        Task<PagedResponse<PersonResponse>> GetPersonsAsync(
+                string? filter,
+                string? sortBy,
+                bool isDescending,
+                int pageNumber,
+                int itemsPerPage,
+                CancellationToken cancellationToken);
         Task<PersonResponse> GetPersonAsync(int code, CancellationToken cancellationToken);
         Task DeletePersonAsync(int code, CancellationToken cancellationToken);
         Task<PersonResponse> UpsertPersonAsync(PersonRequest person, CancellationToken cancellationToken);

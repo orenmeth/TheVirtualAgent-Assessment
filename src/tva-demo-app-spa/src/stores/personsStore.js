@@ -13,7 +13,7 @@ export const usePersonsStore = defineStore('personsStore', () => {
       loading.value = true;
       error.value = null;
       try {
-        let url = `/Person/GetPersons/page/${page}/pageSize/${pageSize}/descending/${descending}/sortBy/${sortBy}/filter/${filter}`;
+        let url = `/Person/GetPersons?page=${page}&pageSize=${pageSize}&descending=${descending}&sortBy=${sortBy}&filter=${filter}`;
         const response = await api.get(url);
         persons.value = response.data.items
         totalItems.value = response.data.totalItems;
@@ -75,8 +75,6 @@ export const usePersonsStore = defineStore('personsStore', () => {
       error.value = null;
       try {
         const person = await getPersonByCode(code);
-        console.log('Deleting person:', person);
-
         if (person.accounts.length === 0 || person.accounts.filter((account) => account.accountStatusId === 1).length === 0) {
           await api.delete(`/Person/DeletePerson/${code}`);
           persons.value = this.persons.filter(p => p.code !== code);

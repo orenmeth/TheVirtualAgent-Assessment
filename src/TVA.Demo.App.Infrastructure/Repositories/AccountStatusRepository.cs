@@ -12,7 +12,7 @@ namespace TVA.Demo.App.Infrastructure.Repositories
         private readonly IDbConnectionProvider _dbConnectionProvider = dbConnectionProvider;
         private readonly IDapperWrapper _dapperWrapper = dapperWrapper;
 
-        public async Task<IEnumerable<AccountStatusDto?>> GetAccountStatusesAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<AccountStatusDto>> GetAccountStatusesAsync(CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);
             var commandDefinition = new CommandDefinition(
