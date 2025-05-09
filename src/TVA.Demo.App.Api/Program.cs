@@ -31,10 +31,20 @@ builder.Services.AddTransient<ITransactionService, TransactionService>();
 
 builder.Services.AddCors(options =>
 {
+    // Web
     options.AddPolicy("AllowLocalhost9000",
         policy =>
         {
             policy.WithOrigins("http://localhost:9000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+
+    // Electron
+    options.AddPolicy("AllowLocalhost9300",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:9300")
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
