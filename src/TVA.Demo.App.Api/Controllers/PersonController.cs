@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
-using TVA.Demo.App.Domain.Models;
 using TVA.Demo.App.Domain.Models.Requests;
 using TVA.Demo.App.Domain.Models.Responses;
 
@@ -13,6 +13,7 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly ILogger<PersonController> _logger = logger;
         private readonly IPersonService _personService = personService;
 
+        [Authorize]
         [HttpGet("GetPersons")]
         public async Task<IActionResult> GetPersonsAsync([FromQuery] GetPersonsRequest request, CancellationToken cancellationToken = default)
         {
@@ -48,6 +49,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetPerson/{code}")]
         public async Task<IActionResult> GetPersonByCodeAsync(int code, CancellationToken cancellationToken)
         {
@@ -67,6 +69,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("DeletePerson/{code}")]
         public async Task<IActionResult> DeletePersonAsync(int code, CancellationToken cancellationToken)
         {
@@ -85,6 +88,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("UpsertPerson")]
         public async Task<IActionResult> UpsertPersonAsync (PersonRequest person, CancellationToken cancellationToken)
         {

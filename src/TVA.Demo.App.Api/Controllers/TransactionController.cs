@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models.Requests;
 using TVA.Demo.App.Domain.Models.Responses;
@@ -12,6 +13,7 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly ILogger<TransactionController> _logger = logger;
         private readonly ITransactionService _transactionService = transactionService;
 
+        [Authorize]
         [HttpGet("GetTransaction/{code}")]
         public async Task<IActionResult> GetTransactionByCodeAsync(int code, CancellationToken cancellationToken)
         {
@@ -31,6 +33,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("DeleteTransaction/{code}")]
         public async Task<IActionResult> DeleteTransactionAsync(int code, CancellationToken cancellationToken)
         {
@@ -51,6 +54,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("UpsertTransaction")]
         public async Task<IActionResult> UpsertTransactionAsync(TransactionRequest transaction, CancellationToken cancellationToken)
         {

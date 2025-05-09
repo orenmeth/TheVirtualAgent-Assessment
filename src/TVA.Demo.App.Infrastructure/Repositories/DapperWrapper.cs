@@ -40,6 +40,11 @@ namespace TVA.Demo.App.Infrastructure.Repositories
             return await connection.QuerySingleOrDefaultAsync<T>(command);
         }
 
+        public async Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection connection, string sql, object parameters)
+        {
+            return await connection.QuerySingleOrDefaultAsync<T>(sql, parameters);
+        }
+
         public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, CommandDefinition command)
         {
             return await connection.QueryAsync<T>(command);

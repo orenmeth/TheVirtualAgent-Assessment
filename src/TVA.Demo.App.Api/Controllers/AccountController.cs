@@ -1,4 +1,4 @@
-﻿using Azure.Core;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models.Requests;
@@ -13,6 +13,7 @@ namespace TVA.Demo.App.Api.Controllers
         private readonly ILogger<AccountController> _logger = logger;
         private readonly IAccountService _accountService = accountService;
 
+        [Authorize]
         [HttpGet("GetAccount/{code}")]
         public async Task<IActionResult> GetAccountByCodeAsync(int code, CancellationToken cancellationToken)
         {
@@ -38,6 +39,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("GetAccountStatuses")]
         public async Task<IActionResult> GetAccountStatusesAsync(CancellationToken cancellationToken)
         {
@@ -52,6 +54,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("DeleteAccount/{code}")]
         public async Task<IActionResult> DeleteAccountAsync(int code, CancellationToken cancellationToken)
         {
@@ -72,6 +75,7 @@ namespace TVA.Demo.App.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("UpsertAccount")]
         public async Task<IActionResult> UpsertAccountAsync(AccountRequest account, CancellationToken cancellationToken)
         {

@@ -94,6 +94,7 @@
     <Build Include="Programmability\Stored Procedures\dbo\GetAccountStatuses.sql" />
     <Build Include="Tables\dbo\AccountsAudit.sql" />
     <Build Include="Programmability\Stored Procedures\dbo\DeleteTransaction.sql" />
+    <Build Include="Tables\dbo\Users.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Presets\dbo\AccountPresets.sql" />

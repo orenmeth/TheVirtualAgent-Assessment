@@ -162,6 +162,7 @@
 <script setup>
 import { ref } from "vue";
 import { useQuasar } from "quasar";
+import { route } from "quasar/wrappers";
 
 const $q = useQuasar();
 
@@ -178,6 +179,7 @@ function logoutNotify() {
   $q.notify({
       message: "Logged out"
     });
+    route.push("/login");
 }
 </script>
 

@@ -11,31 +11,58 @@
           @click="$q.dark.toggle()"
           :icon="$q.dark.isActive ? 'nights_stay' : 'wb_sunny'"
         />
-        <q-card :style="cardStyle">
+        <q-card :style="cardStyle" class="q-pa-md">
           <q-img src="https://cdn.pixabay.com/photo/2018/05/04/15/49/cyber-security-3374252_1280.jpg"></q-img>
-          <q-card-section>
-            <q-avatar
+          <q-card-section class="q-pt-xl">
+             <q-avatar
               size="74px"
               class="absolute"
               style="top: 0; right: 25px; transform: translateY(-50%)"
             >
+              <q-icon name="lock" color="primary" size="xl"/>
             </q-avatar>
           </q-card-section>
 
           <q-card-section>
-            <q-form class="q-gutter-md">
-              <q-input filled v-model="username" label="Username" lazy-rules />
+            <div class="text-h5 text-center q-mb-md">Login</div>
+            <q-form @submit.prevent="handleLogin" class="q-gutter-md">
+              <q-input
+                filled
+                v-model="usernameOrEmail"
+                label="Username or Email"
+                lazy-rules
+                :rules="[val => !!val || 'Username or Email is required']"
+                :loading="authStore.isLoading"
+                :disable="authStore.isLoading"
+              />
 
-              <q-input type="password" filled v-model="password" label="Password" lazy-rules />
+              <q-input
+                type="password"
+                filled
+                v-model="password"
+                label="Password"
+                lazy-rules
+                :rules="[val => !!val || 'Password is required']"
+                :loading="authStore.isLoading"
+                :disable="authStore.isLoading"
+              />
+
+              <div v-if="authStore.authError" class="text-negative q-mb-md text-center">
+                {{ authStore.authError }}
+              </div>
 
               <div>
                 <q-btn
                   label="Login"
-                  to="/home"
-                  type="button"
+                  type="submit"
                   color="primary"
-                  @click="loginNotify"
+                  class="full-width"
+                  :loading="authStore.isLoading"
+                  :disable="authStore.isLoading"
                 />
+              </div>
+              <div class="q-mt-md text-center">
+                Don't have an account? <router-link to="/register">Register here</router-link>
               </div>
             </q-form>
           </q-card-section>
@@ -46,23 +73,54 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useQuasar } from 'quasar'
+import { ref, computed } from 'vue';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/authStore';
 
-const $q = useQuasar()
-const username = ref('admin')
-const password = ref('Admin@CRM')
+const $q = useQuasar();
+const router = useRouter();
+const authStore = useAuthStore();
+
+const usernameOrEmail = ref('');
+const password = ref('');
 
 const cardStyle = computed(() => {
   return $q.platform.is.mobile
-    ? { width: '90%', margin: '0 auto' }
-    : { width: '30%', minWidth: '200px' }
-})
+    ? { width: '90%', margin: '0 auto', zIndex: 1 }
+    : { width: '30%', minWidth: '350px', zIndex: 1 };
+});
 
-function loginNotify() {
-  $q.notify({
-    message: 'Login Successful',
-  })
+async function handleLogin() {
+  if (!usernameOrEmail.value || !password.value) {
+    $q.notify({
+      color: 'negative',
+      message: 'Please fill in all fields.',
+      icon: 'warning',
+    });
+    return;
+  }
+
+  const success = await authStore.login({
+    usernameOrEmail: usernameOrEmail.value,
+    password: password.value,
+  });
+
+  if (success) {
+    $q.notify({
+      color: 'positive',
+      message: 'Login Successful!',
+      icon: 'check_circle',
+    });
+    const redirectPath = router.currentRoute.value.query.redirect || '/home';
+    router.push(redirectPath);
+  } else {
+    $q.notify({
+      color: 'negative',
+      message: authStore.authError || 'Login failed. Please check your credentials.',
+      icon: 'error',
+    });
+  }
 }
 </script>
 
@@ -70,7 +128,7 @@ function loginNotify() {
 .login-page {
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -85,48 +143,19 @@ function loginNotify() {
   height: 100%;
   background-size: 400% 400%;
   animation: gradient 15s ease infinite;
+}
 
-  &.dark {
-    background-image: linear-gradient(45deg, #1B5E20, #0D47A1, #4A148C, #E65100);
-  }
+.gradient.dark {
+  background-image: linear-gradient(45deg, #1B5E20, #0D47A1, #4A148C, #E65100);
+}
 
-  &.normal {
-    background-image: linear-gradient(45deg, #8BC34A, #1E88E5, #AB47BC, #FFB300);
-  }
+.gradient.normal {
+  background-image: linear-gradient(45deg, #8BC34A, #1E88E5, #AB47BC, #FFB300);
 }
 
 @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-
-.login-container {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  z-index: 1;
-}
-
-.login-container-dark {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  z-index: 1;
-}
-
-h1 {
-  margin-bottom: 20px;
-  color: #333;
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 </style>

@@ -9,5 +9,6 @@ namespace TVA.Demo.App.Domain.Interfaces
         Task<int> ExecuteAsync(IDbConnection connection, string sql, object? param = null, IDbTransaction? transaction = null, int? commandTimeout = null, CommandType? commandType = null);
         Task<IEnumerable<T>> QueryAsync<T>(IDbConnection connection, CommandDefinition command);
         Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection connection, CommandDefinition command);
+        Task<T?> QuerySingleOrDefaultAsync<T>(IDbConnection connection, string sql, object parameters);
     }
 }
