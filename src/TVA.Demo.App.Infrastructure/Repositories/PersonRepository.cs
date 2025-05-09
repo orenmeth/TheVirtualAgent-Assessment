@@ -12,6 +12,11 @@ namespace TVA.Demo.App.Infrastructure.Repositories
         private readonly IDbConnectionProvider _dbConnectionProvider = dbConnectionProvider;
         private readonly IDapperWrapper _dapperWrapper = dapperWrapper;
 
+        /* 
+         * The GetPersons stored procedure can be modified to handle paging, sorting and filtering it the dataset is expected to be large.
+         * This will be more efficient than fetching all records and then applying paging, sorting and filtering in memory.
+         * For this small dataset, it is acceptable to fetch all records and apply paging, sorting and filtering in memory.
+        */
         public async Task<IEnumerable<PersonDto>> GetPersonsAsync(CancellationToken cancellationToken)
         {
             using SqlConnection connection = await _connectionFactory.CreateSqlConnectionAsync(_dbConnectionProvider.GetDefaultDbConnection(), cancellationToken);

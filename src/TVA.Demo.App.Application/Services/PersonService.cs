@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading;
 using TVA.Demo.App.Application.Extensions;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Entities;
@@ -20,34 +21,28 @@ namespace TVA.Demo.App.Application.Services
         private const string PersonCacheKey = "PersonData";
         private const string PersonAccountsCacheKey = "PersonAccountsData";
 
-        public async Task<List<PersonResponse>> GetPersonsAsync(CancellationToken cancellationToken)
+        public async Task<PagedResponse<PersonResponse>> GetPersonsAsync(
+                string? filter,
+                string? sortBy,
+                bool isDescending,
+                int pageNumber,
+                int itemsPerPage,
+                CancellationToken cancellationToken)
         {
             string cacheKey = $"{PersonsCacheKey}";
 
-            IEnumerable<PersonDto>? personDtos;
-            if (_cache.TryGetValue(cacheKey, out List<PersonDto>? cachedPersons))
-            {
-                personDtos = cachedPersons;
-            }
-            else
-            {
-                personDtos = await _personRepository.GetPersonsAsync(cancellationToken);
+            IEnumerable<PersonDto> personDtos = await GetPersonDtosAsync(cacheKey, cancellationToken);            
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
+            var sortedAndFilteredPersonDtos = personDtos.Filter(filter).Sort(sortBy, isDescending);
 
-                _cache.Set(cacheKey, personDtos, cacheEntryOptions);
-            }
+            var totalItems = sortedAndFilteredPersonDtos.Count();
 
-            if (personDtos == null || !personDtos.Any())
-            {
-                return [];
-            }
+            var pagedDtos = sortedAndFilteredPersonDtos
+                .Skip((pageNumber - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToList();
 
-            var persons = personDtos
+            var persons = pagedDtos
                 .Select(p => new PersonResponse
                 {
                     Code = p.Code,
@@ -57,7 +52,13 @@ namespace TVA.Demo.App.Application.Services
                 })
                 .ToList();
 
-            return persons;
+            return new PagedResponse<PersonResponse>
+            {
+                Items = persons,
+                TotalItems = totalItems,
+                CurrentPage = pageNumber,
+                PageSize = itemsPerPage
+            };
         }
 
         public async Task<PersonResponse> GetPersonAsync(int code, CancellationToken cancellationToken)
@@ -65,46 +66,11 @@ namespace TVA.Demo.App.Application.Services
             string personCacheKey = $"{PersonCacheKey}_Code_{code}";
             string personAccountsCacheKey = $"{PersonAccountsCacheKey}_Code_{code}";
 
-            PersonDto? personDto;
-            if (_cache.TryGetValue(personCacheKey, out PersonDto? cachedPerson))
-            {
-                personDto = cachedPerson;
-            }
-            else
-            {
-                personDto = await _personRepository.GetPersonAsync(code, cancellationToken);
+            PersonDto? personDto = await GetPersonDtoAsync(personCacheKey, code, cancellationToken);
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
+            IEnumerable<AccountDto> accountDtos = await GetPersonAccountsAsync(personAccountsCacheKey, code, cancellationToken);
 
-                _cache.Set(personCacheKey, personDto, cacheEntryOptions);
-            }
-
-            if (personDto == null)
-            {
-                throw new RequestFailedException($"Person with code {code} not found.");
-            }
-
-            IEnumerable<AccountDto>? accountDtos;
-            if (_cache.TryGetValue(personAccountsCacheKey, out List<AccountDto>? cachedAccounts))
-            {
-                accountDtos = cachedAccounts;
-            }
-            else
-            {
-                accountDtos = await _accountRepository.GetAccountsByPersonCodeAsync(code, cancellationToken);
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
-                _cache.Set(personAccountsCacheKey, accountDtos, cacheEntryOptions);
-            }
-
-            var accounts = accountDtos!
+            var accounts = accountDtos
                 .Select(a => new AccountResponse
                 {
                     Code = a.Code,
@@ -125,12 +91,14 @@ namespace TVA.Demo.App.Application.Services
             string personCacheKey = $"{PersonCacheKey}_Code_{code}";
             string personAccountsCacheKey = $"{PersonAccountsCacheKey}_Code_{code}";
 
+            var deleteRelatedAccounts = true;
+
             _cache.Remove(personCacheKey);
             _cache.Remove(personAccountsCacheKey);
 
             InvalidatePersonsCache();
 
-            await _personRepository.DeletePersonAsync(code, true, cancellationToken);
+            await _personRepository.DeletePersonAsync(code, deleteRelatedAccounts, cancellationToken);
         }
 
         public async Task<PersonResponse> UpsertPersonAsync(PersonRequest person, CancellationToken cancellationToken)
@@ -165,6 +133,81 @@ namespace TVA.Demo.App.Application.Services
         private void InvalidatePersonAccountsCache(int personCode)
         {
             _cache.Remove($"{PersonAccountsCacheKey}_Code_{personCode}");
+        }
+
+        private async Task<IEnumerable<PersonDto>> GetPersonDtosAsync(string cacheKey, CancellationToken cancellationToken)
+        {
+            IEnumerable<PersonDto> personDtos;
+
+            if (_cache.TryGetValue(cacheKey, out List<PersonDto>? cachedPersons))
+            {
+                personDtos = cachedPersons ?? [];
+            }
+            else
+            {
+                personDtos = await _personRepository.GetPersonsAsync(cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(cacheKey, personDtos, cacheEntryOptions);
+            }
+
+            return personDtos;
+        }
+
+        private async Task<PersonDto> GetPersonDtoAsync(string personCacheKey, int personCode, CancellationToken cancellationToken)
+        {
+            PersonDto? personDto;
+
+            if (_cache.TryGetValue(personCacheKey, out PersonDto? cachedPerson))
+            {
+                personDto = cachedPerson ?? default;
+            }
+            else
+            {
+                personDto = await _personRepository.GetPersonAsync(personCode, cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(personCacheKey, personDto, cacheEntryOptions);
+            }
+
+            if (personDto == null)
+            {
+                throw new RequestFailedException($"Person with code {personCode} not found.");
+            }
+
+            return personDto;
+        }
+
+        private async Task<IEnumerable<AccountDto>> GetPersonAccountsAsync(string personAccountsCacheKey, int personCode, CancellationToken cancellationToken)
+        {
+            IEnumerable<AccountDto> accountDtos;
+
+            if (_cache.TryGetValue(personAccountsCacheKey, out List<AccountDto>? cachedAccounts))
+            {
+                accountDtos = cachedAccounts ?? [];
+            }
+            else
+            {
+                accountDtos = await _accountRepository.GetAccountsByPersonCodeAsync(personCode, cancellationToken);
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+                _cache.Set(personAccountsCacheKey, accountDtos, cacheEntryOptions);
+            }
+
+            return accountDtos;
         }
     }
 }

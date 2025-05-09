@@ -66,7 +66,7 @@
                   @click="reopenAccount"
                   class="q-ml-sm"
                 />
-                <q-btn flat class="q-ml-sm" @click="$router.go(-1)">Back</q-btn>
+                <q-btn flat class="q-ml-sm" @click="navigateToPersonDetails(accountForm.personCode)">Back</q-btn>
               </div>
             </q-form>
           </q-card-section>
@@ -322,7 +322,6 @@ function editTransaction(transaction) {
 }
 
 async function handleSaveTransaction(transaction) {
-  console.log('Saving transaction:', transaction);
   loading.value = true;
   try {
     let transactionModel = transaction;
@@ -338,6 +337,10 @@ async function handleSaveTransaction(transaction) {
     transactionDialog.value = false;
     loading.value = false;
   }
+}
+
+function navigateToPersonDetails(personCode) {
+  router.push({ name: 'person_details', params: { personId: personCode } })
 }
 </script>
 

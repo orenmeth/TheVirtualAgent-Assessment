@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Entities;
 using TVA.Demo.App.Domain.Interfaces;
@@ -15,7 +16,6 @@ namespace TVA.Demo.App.Application.Services
         private readonly ITransactionRepository _transactionRepository = transactionRepository;
         private readonly IMemoryCache _cache = cache;
 
-        private const string AccountsCacheKey = "AccountsData";
         private const string AccountCacheKey = "AccountData";
         private const string AccountTransactionsCacheKey = "AccountTransactionsData";
         private const string PersonAccountsCacheKey = "PersonAccountsData";
@@ -23,26 +23,9 @@ namespace TVA.Demo.App.Application.Services
 
         public async Task<List<AccountResponse>> GetAccountsByPersonCodeAsync(int personCode, CancellationToken cancellationToken)
         {
-            string cacheKey = $"{AccountsCacheKey}";
+            string cacheKey = $"{PersonAccountsCacheKey}_Code_{personCode}";
 
-            IEnumerable<AccountDto>? accountDtos;
-            if (_cache.TryGetValue(cacheKey, out List<AccountDto>? cachedAccounts))
-            {
-                accountDtos = cachedAccounts;
-            }
-            else
-            {
-                accountDtos = await _accountRepository.GetAccountsByPersonCodeAsync(personCode, cancellationToken);
-
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
-
-                _cache.Set(cacheKey, accountDtos, cacheEntryOptions);
-            }
-
+            IEnumerable<AccountDto> accountDtos = await GetPersonAccountDtos(cacheKey, personCode, cancellationToken);
             if (accountDtos == null || !accountDtos.Any())
             {
                 return [];
@@ -67,46 +50,11 @@ namespace TVA.Demo.App.Application.Services
             string accountCacheKey = $"{AccountCacheKey}_Code_{code}";
             string accountTransactionsCacheKey = $"{AccountTransactionsCacheKey}_Code_{code}";
 
-            AccountDto? accountDto;
-            if (_cache.TryGetValue(accountCacheKey, out AccountDto? cachedAccount))
-            {
-                accountDto = cachedAccount;
-            }
-            else
-            {
-                accountDto = await _accountRepository.GetAccountAsync(code, cancellationToken);
+            AccountDto accountDto = await GetAccountDtoAsync(accountCacheKey, code, cancellationToken);
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
+            IEnumerable<TransactionDto> transactionDtos = await GetAccountTransactionDtos(accountTransactionsCacheKey, code, cancellationToken);
 
-                _cache.Set(accountCacheKey, accountDto, cacheEntryOptions);
-            }
-
-            if (accountDto == null)
-            {
-                throw new RequestFailedException($"Account with code {code} not found.");
-            }
-
-            IEnumerable<TransactionDto>? transactionDtos;
-            if (_cache.TryGetValue(accountTransactionsCacheKey, out List<TransactionDto>? cachedTransactions))
-            {
-                transactionDtos = cachedTransactions;
-            }
-            else
-            {
-                transactionDtos = await _transactionRepository.GetTransactionsByAccountCodeAsync(code, cancellationToken);
-                var cacheEntryOptions = new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
-                    SlidingExpiration = TimeSpan.FromMinutes(2)
-                };
-                _cache.Set(accountTransactionsCacheKey, transactionDtos, cacheEntryOptions);
-            }
-
-            var transactions = transactionDtos!
+            var transactions = transactionDtos
                 .Select(t => new TransactionResponse
                 {
                     Code = t.Code,
@@ -114,7 +62,7 @@ namespace TVA.Demo.App.Application.Services
                     TransactionDate = t.Transaction_Date,
                     CaptureDate = t.Capture_Date,
                     Amount = t.Amount,
-                    Description = t.Description!
+                    Description = t.Description
                 })
                 .ToList();
 
@@ -133,12 +81,16 @@ namespace TVA.Demo.App.Application.Services
 
         public async Task DeleteAccountAsync(int code, CancellationToken cancellationToken)
         {
-            string accountCacheKey = $"{AccountCacheKey}_Code_{code}";
-            string accountTransactionsCacheKey = $"{AccountTransactionsCacheKey}_Code_{code}";
+            var accountDto = await _accountRepository.GetAccountAsync(code, cancellationToken);
+            
+            if (accountDto == null)
+            {
+                throw new RequestFailedException($"Account with code {code} not found.");
+            }
 
-            _cache.Remove(accountCacheKey);
-            _cache.Remove(accountTransactionsCacheKey);
-            InvalidateAccountsCache();
+            InvalidateAccountCache(code);
+            InvalidateAccountTransactionsCache(code);
+            InvalidatePersonAccountsCache(accountDto.Person_Code);
 
             await _accountRepository.DeleteAccountAsync(code, cancellationToken);
         }
@@ -157,7 +109,6 @@ namespace TVA.Demo.App.Application.Services
             var returnCode = await _accountRepository.UpsertAccountAsync(accountDto, cancellationToken);
             var newAccount = await _accountRepository.GetAccountAsync(returnCode, cancellationToken);
 
-            InvalidateAccountsCache();
             InvalidateAccountCache(returnCode);
             InvalidateAccountTransactionsCache(returnCode);
             InvalidatePersonAccountsCache(newAccount!.Person_Code);
@@ -204,11 +155,6 @@ namespace TVA.Demo.App.Application.Services
             return accountStatuses;
         }
 
-        private void InvalidateAccountsCache()
-        {
-            _cache.Remove(AccountsCacheKey);
-        }
-
         private void InvalidateAccountCache(int accountCode)
         {
             _cache.Remove($"{AccountCacheKey}_Code_{accountCode}");
@@ -222,6 +168,81 @@ namespace TVA.Demo.App.Application.Services
         private void InvalidatePersonAccountsCache(int personCode)
         {
             _cache.Remove($"{PersonAccountsCacheKey}_Code_{personCode}");
+        }
+
+        private async Task<AccountDto> GetAccountDtoAsync(string accountCacheKey, int accountCode, CancellationToken cancellationToken)
+        {
+            AccountDto? accountDto;
+
+            if (_cache.TryGetValue(accountCacheKey, out AccountDto? cachedAccount))
+            {
+                accountDto = cachedAccount ?? default;
+            }
+            else
+            {
+                accountDto = await _accountRepository.GetAccountAsync(accountCode, cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(accountCacheKey, accountDto, cacheEntryOptions);
+            }
+
+            if (accountDto == null)
+            {
+                throw new RequestFailedException($"Account with code {accountCode} not found.");
+            }
+
+            return accountDto;
+        }
+
+        private async Task<IEnumerable<TransactionDto>> GetAccountTransactionDtos(string accountTransactionsCacheKey, int accountCode, CancellationToken cancellationToken)
+        {
+            IEnumerable<TransactionDto> transactionDtos;
+
+            if (_cache.TryGetValue(accountTransactionsCacheKey, out List<TransactionDto>? cachedTransactions))
+            {
+                transactionDtos = cachedTransactions ?? [];
+            }
+            else
+            {
+                transactionDtos = await _transactionRepository.GetTransactionsByAccountCodeAsync(accountCode, cancellationToken);
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+                _cache.Set(accountTransactionsCacheKey, transactionDtos, cacheEntryOptions);
+            }
+
+            return transactionDtos;
+        }
+
+        private async Task<IEnumerable<AccountDto>> GetPersonAccountDtos(string cacheKey, int personCode, CancellationToken cancellationToken)
+        {
+            IEnumerable<AccountDto>? accountDtos;
+
+            if (_cache.TryGetValue(cacheKey, out List<AccountDto>? cachedAccounts))
+            {
+                accountDtos = cachedAccounts ?? [];
+            }
+            else
+            {
+                accountDtos = await _accountRepository.GetAccountsByPersonCodeAsync(personCode, cancellationToken);
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5),
+                    SlidingExpiration = TimeSpan.FromMinutes(2)
+                };
+
+                _cache.Set(cacheKey, accountDtos, cacheEntryOptions);
+            }
+
+            return accountDtos;
         }
     }
 }

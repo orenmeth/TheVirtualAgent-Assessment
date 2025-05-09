@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TVA.Demo.App.Application.Interfaces;
 using TVA.Demo.App.Domain.Models.Requests;
+using TVA.Demo.App.Domain.Models.Responses;
 
 namespace TVA.Demo.App.Api.Controllers
 {
@@ -18,6 +19,11 @@ namespace TVA.Demo.App.Api.Controllers
             {
                 return Ok(await _transactionService.GetTransactionAsync(code, cancellationToken));
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for GetTransaction: {Message}", ex.Message);
+                return NotFound(new ErrorResponse<int> { Item = code, ErrorMessage = ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while fetching transaction with code {Code}.", code);
@@ -33,6 +39,11 @@ namespace TVA.Demo.App.Api.Controllers
                 await _transactionService.DeleteTransactionAsync(code, cancellationToken);
                 return Ok();
             }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for DeleteTransaction: {Message}", ex.Message);
+                return NotFound(new ErrorResponse<int> { Item = code, ErrorMessage = ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while upserting transaction.");
@@ -46,6 +57,11 @@ namespace TVA.Demo.App.Api.Controllers
             try
             {
                 return Ok(await _transactionService.UpsertTransactionAsync(transaction, cancellationToken));
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Invalid request for UpsertTransaction: {Message}", ex.Message);
+                return NotFound(new ErrorResponse<TransactionRequest> { Item = transaction, ErrorMessage = ex.Message });
             }
             catch (Exception ex)
             {
